@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deutsch lernen | haruru666 的德语学习博客</title>
+    <style>
+        :root {
+            --bg: #f6f8ff;
+            --surface: rgba(255, 255, 255, 0.92);
+            --text: #1f2937;
+            --muted: #64748b;
+            --accent: #6d5dfc;
+            --border: rgba(109, 93, 252, 0.16);
+            --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.75;
+            color: var(--text);
+            background: linear-gradient(135deg, #f8f7ff 0%, #eef7ff 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: min(920px, calc(100% - 2rem));
+            margin: 0 auto;
+            padding: 2rem 0 3rem;
+        }
+
+        .page {
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 2rem;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .top-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .top-nav a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            padding: 0.45rem 0.7rem;
+            border-radius: 999px;
+        }
+
+        .top-nav a:hover {
+            background: rgba(109, 93, 252, 0.1);
+            color: var(--accent);
+        }
+
+        h1 {
+            margin: 0.3rem 0 0.5rem;
+            font-size: clamp(1.8rem, 2.6vw, 2.5rem);
+        }
+
+        .lead {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.2rem;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 1rem 1.1rem;
+            background: rgba(255, 255, 255, 0.84);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 0.35rem;
+        }
+
+        .card a {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page">
+            <nav class="top-nav" aria-label="主导航">
+                <a href="index.html">首页</a>
+                <a href="About.html">About</a>
+                <a href="DeutschLernen.html">Deutsch lernen</a>
+            </nav>
+            <h1>Deutsch lernen</h1>
+            <p class="lead">这是德语学习板块的入口，下面分为词汇、语法和听力三个子栏目，帮助我把学习内容整理得更清晰。</p>
+
+            <div class="grid">
+                <section class="card">
+                    <h3>Grammatik</h3>
+                    <p>记录德语语法点和常见句型。</p>
+                    <p><a href="Grammatik.html">查看页面 →</a></p>
+                </section>
+                <section class="card">
+                    <h3>Vokabeln</h3>
+                    <p>积累单词、短语和常用表达。</p>
+                    <p><a href="Vokabeln.html">查看页面 →</a></p>
+                </section>
+                <section class="card">
+                    <h3>Hörverstehen</h3>
+                    <p>整理听力练习方法和小练习。</p>
+                    <p><a href="Hörverstehen.html">查看页面 →</a></p>
+                </section>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

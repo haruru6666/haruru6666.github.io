@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammatik | haruru666 的德语学习博客</title>
+    <style>
+        :root {
+            --bg: #f3f6ff;
+            --surface: rgba(255, 255, 255, 0.9);
+            --text: #1f2937;
+            --muted: #64748b;
+            --accent: #6d5dfc;
+            --border: rgba(109, 93, 252, 0.18);
+            --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: linear-gradient(135deg, #f8f7ff 0%, #eef7ff 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: min(960px, calc(100% - 2rem));
+            margin: 0 auto;
+            padding: 2rem 0 3rem;
+        }
+
+        .page {
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 2rem;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .top-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            text-decoration: none;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        h1 {
+            margin: 0.3rem 0 0.5rem;
+            font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+        }
+
+        .lead {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1.03rem;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.3rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 1rem 1.1rem;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 0.4rem;
+        }
+
+        .example {
+            margin-top: 0.6rem;
+            padding: 0.7rem 0.8rem;
+            border-left: 3px solid var(--accent);
+            background: rgba(109, 93, 252, 0.06);
+            border-radius: 8px;
+        }
+
+        footer {
+            margin-top: 1.4rem;
+            color: var(--muted);
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page">
+            <a class="top-link" href="index.html">← 返回首页</a>
+            <h1>Grammatik</h1>
+            <p class="lead">这里会记录我正在学习的德语语法重点，让语法不再只是零散的规则，而是能顺着逻辑理解的内容。</p>
+
+            <div class="grid">
+                <section class="card">
+                    <h3>1. 定冠词、未定冠词和零冠词</h3>
+                    <p>德语中名词前的冠词会影响句子的语义和语法结构。学习时要重点区分 der、die、das 以及否定词的用法。</p>
+                    <div class="example">例句：Der Mann liest ein Buch. —— 这个男人在看书。</div>
+                </section>
+
+                <section class="card">
+                    <h3>2. 现在时的基本用法</h3>
+                    <p>现在时是德语最基础的时态之一，很多日常表达都可以用它来表达现在和将来。</p>
+                    <div class="example">例句：Ich lerne Deutsch jeden Tag. —— 我每天学习德语。</div>
+                </section>
+
+                <section class="card">
+                    <h3>3. 动词的位置</h3>
+                    <p>德语句子里，谓语动词常常出现在第二位，不过在从句中位置会发生变化。</p>
+                    <div class="example">例句：Am Morgen trinke ich Kaffee. —— 早上我喝咖啡。</div>
+                </section>
+
+                <section class="card">
+                    <h3>4. 从句和连词</h3>
+                    <p>掌握 weil、dass、wenn 这类连词，可以让句子表达更自然，也更适合写作和理解。</p>
+                    <div class="example">例句：Ich bleibe zu Hause, weil ich müde bin. —— 我待在家里，因为我很累。</div>
+                </section>
+            </div>
+
+            <footer>
+                <p>继续积累，语法会慢慢变得清晰起来。</p>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>

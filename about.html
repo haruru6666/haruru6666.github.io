@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | haruru666 的德语学习博客</title>
+    <style>
+        :root {
+            --bg: #f7f5ff;
+            --surface: rgba(255, 255, 255, 0.92);
+            --text: #1f2937;
+            --muted: #64748b;
+            --accent: #6d5dfc;
+            --border: rgba(109, 93, 252, 0.18);
+            --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.8;
+            color: var(--text);
+            background: linear-gradient(135deg, #faf8ff 0%, #eef7ff 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: min(900px, calc(100% - 2rem));
+            margin: 0 auto;
+            padding: 2rem 0 3rem;
+        }
+
+        .page {
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 2rem;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .top-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            text-decoration: none;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        h1 {
+            margin: 0.3rem 0 0.5rem;
+            font-size: clamp(1.8rem, 2.6vw, 2.5rem);
+        }
+
+        .lead {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1.02rem;
+        }
+
+        .card {
+            margin-top: 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 1.1rem 1.2rem;
+            background: rgba(255, 255, 255, 0.82);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 0.35rem;
+        }
+
+        footer {
+            margin-top: 1.3rem;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page">
+            <a class="top-link" href="index.html">← 返回首页</a>
+            <h1>About</h1>
+            <p class="lead">这里是一个用来记录学习、生活和一点点思考的个人博客空间。</p>
+
+            <div class="card">
+                <h3>关于这个博客</h3>
+                <p>我希望把德语学习、大学生活以及一些日常观察都记录下来。每一次进步都值得被留下，也希望这份记录能帮助自己更认真地成长。</p>
+            </div>
+
+            <div class="card">
+                <h3>我想写什么</h3>
+                <p>未来会在这里更新德语学习笔记、语法总结、阅读和听力相关内容，也会分享一些生活中的小感想。</p>
+            </div>
+
+            <footer>
+                <p>感谢你来到这里，也欢迎你一起看我慢慢成长。</p>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>

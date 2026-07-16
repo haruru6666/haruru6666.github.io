@@ -56,6 +56,27 @@
             box-shadow: var(--shadow);
         }
 
+        .top-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .top-nav a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            padding: 0.45rem 0.8rem;
+            border-radius: 999px;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .top-nav a:hover {
+            background: rgba(109, 93, 252, 0.1);
+            color: var(--accent);
+        }
+
         .hero::after {
             content: "";
             position: absolute;
@@ -146,6 +167,9 @@
         }
 
         @media (max-width: 700px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
             .container {
                 width: min(100% - 1rem, 1000px);
                 padding-top: 1rem;
@@ -163,7 +187,12 @@
 </head>
 <body>
     <div class="container">
-        <header class="hero">
+        <header class="hero" id="home">
+            <nav class="top-nav" aria-label="主导航">
+                <a href="index.html">首页</a>
+                <a href="About.html">About</a>
+                <a href="DeutschLernen.html">Deutsch lernen</a>
+            </nav>
             <p class="tag">🌿 个人博客 · 德语学习</p>
             <h1>🇩🇪 haruru666 的德语学习空间</h1>
             <p class="lead">记录语言学习、大学生活与日常思考，让每一次进步都被认真留下。</p>
