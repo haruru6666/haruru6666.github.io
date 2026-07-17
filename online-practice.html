@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线练习 | 德语学习站</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="page">
+            <nav class="top-nav" aria-label="主导航">
+                <a href="index.html">首页</a>
+                <a href="about.html">About</a>
+                <a href="DeutschLernen.html">Deutsch lernen</a>
+                <a class="active" href="online-practice.html">在线练习</a>
+            </nav>
+
+            <h1>在线练习</h1>
+            <p class="lead">这里是一个由 AI 驱动的德语语法学习场景：左侧为 A1–B2 语法知识树，中间为语法讲解，右侧为可交互练习与讲解反馈。</p>
+            <p class="ai-hint">AI 会根据你的表达是否语法通顺、意思是否成立来灵活判定；只要句子自然、表达合理，就算通过。</p>
+
+            <div class="practice-shell">
+                <aside class="topic-tree">
+                    <h3>语法知识树</h3>
+                    <div class="topic-group">
+                        <span class="topic-group-title">A1</span>
+                        <button class="topic-btn active" data-topic="sein-haben">sein / haben</button>
+                        <button class="topic-btn" data-topic="praepositionen">介词</button>
+                        <button class="topic-btn" data-topic="satzbau">句子结构</button>
+                    </div>
+                    <div class="topic-group">
+                        <span class="topic-group-title">A2</span>
+                        <button class="topic-btn" data-topic="perfekt">完成时</button>
+                        <button class="topic-btn" data-topic="modalverben">情态动词</button>
+                    </div>
+                    <div class="topic-group">
+                        <span class="topic-group-title">B1-B2</span>
+                        <button class="topic-btn" data-topic="konjunktiv">虚拟式</button>
+                        <button class="topic-btn" data-topic="passiv">被动语态</button>
+                    </div>
+                </aside>
+
+                <section class="lesson-card">
+                    <div class="lesson-meta">
+                        <span class="lesson-pill" id="level-pill">A1</span>
+                        <span class="lesson-pill" id="topic-pill">sein / haben</span>
+                    </div>
+                    <h3 id="lesson-title">sein / haben：表达“是”和“有”</h3>
+                    <p id="lesson-summary">AI 生成的语法讲解会根据你选择的主题实时更新，帮助你理解用法、语义和常见误区。</p>
+                    <div id="lesson-content"></div>
+                </section>
+
+                <aside class="exercise-card">
+                    <h3>练习区</h3>
+                    <div class="practice-summary">
+                        <span class="lesson-pill" id="difficulty-pill">难度：基础</span>
+                        <span class="lesson-pill" id="streak-pill">连对：0</span>
+                    </div>
+                    <p id="exercise-prompt">请选择正确的形式。</p>
+                    <div id="exercise-options" class="exercise-options"></div>
+                    <input id="exercise-input" class="input-field" type="text" placeholder="输入你的答案" style="display:none;">
+                    <div class="practice-actions">
+                        <button class="submit-btn" id="submit-btn">提交答案</button>
+                        <button class="secondary-btn" id="continue-btn">继续练习</button>
+                    </div>
+                    <p id="practice-status" class="practice-status">当前进度：0/3 连续正确</p>
+                    <p id="judge-note" class="judge-note">当前判定：会优先看语法和表达是否通顺，而不是只看是否和标准答案一字不差。</p>
+                    <div id="feedback" class="result-box" style="display:none;"></div>
+                </aside>
+            </div>
+
+            <section class="insight-panel">
+                <div class="insight-card">
+                    <h3>错题本</h3>
+                    <ul id="mistake-list" class="mistake-list"></ul>
+                </div>
+                <div class="insight-card">
+                    <h3>AI 学习建议</h3>
+                    <p id="ai-advice">开始练习后，系统会根据你最近的正确率和错误情况给出针对性的复盘建议。</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        const lessonData = {
+            'sein-haben': {
+                level: 'A1',
+                topic: 'sein / haben',
+                title: 'sein / haben：表达“是”和“有”',
+                summary: 'sein 用来表达状态、身份和位置；haben 用来表达拥有关系。',
+                content: '<p>在德语中，<strong>sein</strong> 和 <strong>haben</strong> 是最基础的动词之一。</p><ul><li>sein 常用于“我是学生”“他在家”这类状态和身份。</li><li>haben 常用于“我有一只猫”“她有两个弟弟”。</li><li>在句子中，它们经常出现在现在时中，是构建基础表达的核心。</li></ul>'
+            },
+            'praepositionen': {
+                level: 'A1',
+                topic: '介词',
+                title: '介词：表示位置和方向',
+                summary: '介词帮助我们说明“在哪里”“朝哪里去”“从哪里来”。',
+                content: '<p>介词与名词或代词搭配时，常常会影响句意。比如：<strong>in</strong> 表示“在……里面”，<strong>auf</strong> 表示“在……上面”。</p><ul><li>在学习时，建议结合场景记忆，而不是单独记单词。</li><li>介词常常和动词搭配，形成固定表达。</li></ul>'
+            },
+            'satzbau': {
+                level: 'A1',
+                topic: '句子结构',
+                title: '句子结构：主语、谓语和宾语',
+                summary: '清楚句子结构能帮助你更稳定地造句和理解句意。',
+                content: '<p>德语句子通常由主语、动词和其他成分构成。先确定主语，再找到谓语动词，最后补充宾语或状语。</p><ul><li>在疑问句中，动词常常前置。</li><li>在陈述句中，动词通常位于第二位。</li></ul>'
+            },
+            'perfekt': {
+                level: 'A2',
+                topic: '完成时',
+                title: '完成时：表达过去发生的动作',
+                summary: '完成时常用于表达已经完成的动作，尤其在口语中很常见。',
+                content: '<p>完成时由助动词 haben/sein + 动词过去分词构成。</p><ul><li>大多数动词用 haben。</li><li>表示移动或变化的动词常用 sein。</li></ul>'
+            },
+            'modalverben': {
+                level: 'A2',
+                topic: '情态动词',
+                title: '情态动词：表达能力、愿望和义务',
+                summary: '情态动词可以让句子表达“能”“想”“必须”等含义。',
+                content: '<p>常见情态动词包括 dürfen、können、müssen、sollen、wollen、mögen。</p><ul><li>它们通常与原形动词搭配。</li><li>句子中要注意词序变化。</li></ul>'
+            },
+            'konjunktiv': {
+                level: 'B1',
+                topic: '虚拟式',
+                title: '虚拟式：表达假设与礼貌',
+                summary: '虚拟式常用于表达委婉、愿望和假设。',
+                content: '<p>Konjunktiv II 常用于表达礼貌请求或假设情况。</p><ul><li>例如：Ich hätte gern ein Kaffee.</li><li>它是高级表达中很重要的一部分。</li></ul>'
+            },
+            'passiv': {
+                level: 'B2',
+                topic: '被动语态',
+                title: '被动语态：强调动作承受者',
+                summary: '被动语态常用于强调动作的承受者，而不是施动者。',
+                content: '<p>被动语态由 werden + 过去分词构成。</p><ul><li>它适合用于新闻、说明文和正式表达。</li><li>学习时要区分主动句与被动句的重心变化。</li></ul>'
+            }
+        };
+
+        const exerciseData = {
+            'sein-haben': {
+                easy: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择正确的形式：Ich ___ ein Buch.',
+                        options: ['habe', 'bin', 'hat', 'seid'],
+                        answer: 'habe',
+                        acceptedAnswers: ['habe', 'ich habe', 'ich habe ein buch'],
+                        keywords: ['habe', 'buch'],
+                        explanation: '这里需要用 haben，因为表达“我有一本书”。'
+                    }
+                ],
+                medium: [
+                    {
+                        type: 'input',
+                        prompt: '请填写正确的形式：Er ___ müde.',
+                        answer: 'ist',
+                        acceptedAnswers: ['ist', 'er ist', 'er ist müde', 'ist sehr müde'],
+                        keywords: ['ist', 'müde'],
+                        explanation: '这里需要用 sein，因为表达“他很累”。'
+                    }
+                ],
+                hard: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择最合适的表达：Wir ___ zwei Katzen.',
+                        options: ['haben', 'sind', 'seid', 'bin'],
+                        answer: 'haben',
+                        acceptedAnswers: ['haben', 'wir haben', 'wir haben zwei katzen'],
+                        keywords: ['haben', 'katzen'],
+                        explanation: '这里表示“我们有两只猫”，所以用 haben。'
+                    }
+                ]
+            },
+            'praepositionen': {
+                easy: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择正确的介词：Er sitzt ___ dem Tisch.',
+                        options: ['an', 'auf', 'bei', 'an dem'],
+                        answer: 'an dem',
+                        acceptedAnswers: ['an dem', 'am', 'an dem tisch'],
+                        keywords: ['an', 'dem'],
+                        explanation: '这里表示“坐在桌子旁边”，可用 an dem 或 am。'
+                    }
+                ],
+                medium: [
+                    {
+                        type: 'input',
+                        prompt: '请填写正确的介词：Wir fahren ___ Berlin.',
+                        answer: 'nach',
+                        acceptedAnswers: ['nach', 'nach berlin', 'wir fahren nach berlin'],
+                        keywords: ['nach', 'berlin'],
+                        explanation: '表示“前往某地”时常用 nach。'
+                    }
+                ],
+                hard: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择更自然的表达：Ich komme ___ der Schule.',
+                        options: ['aus', 'von', 'nach', 'zu'],
+                        answer: 'von',
+                        acceptedAnswers: ['von', 'von der schule', 'ich komme von der schule'],
+                        keywords: ['von', 'schule'],
+                        explanation: '这里表示“从学校来”，通常用 von。'
+                    }
+                ]
+            },
+            'satzbau': {
+                easy: [
+                    {
+                        type: 'input',
+                        prompt: '请填写完整句子：___ du Deutsch?',
+                        answer: 'Sprichst',
+                        acceptedAnswers: ['sprichst', 'sprichst du deutsch', 'du sprichst deutsch'],
+                        keywords: ['sprichst', 'deutsch'],
+                        explanation: '这是疑问句，动词需要前置，因此答案是“Sprichst”。'
+                    }
+                ],
+                medium: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择正确的词序：___ ich heute ins Kino.',
+                        options: ['Gehe', 'Ich gehe', 'Gehe ich'],
+                        answer: 'Ich gehe',
+                        acceptedAnswers: ['ich gehe', 'ich gehe heute ins kino'],
+                        keywords: ['ich', 'gehe'],
+                        explanation: '陈述句中主语一般在前，动词位于第二位。'
+                    }
+                ],
+                hard: [
+                    {
+                        type: 'input',
+                        prompt: '请填写完整句子：Heute ___ ich mit meinen Freunden ins Restaurant.',
+                        answer: 'gehe',
+                        acceptedAnswers: ['gehe', 'ich gehe', 'ich gehe heute'],
+                        keywords: ['gehe', 'heute'],
+                        explanation: '这里是陈述句，动词要放在第二位。'
+                    }
+                ]
+            },
+            'perfekt': {
+                easy: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择正确的完成时形式：Ich ___ mein Handy verloren.',
+                        options: ['habe verloren', 'bin verloren', 'hat verloren', 'werde verloren'],
+                        answer: 'habe verloren',
+                        acceptedAnswers: ['habe verloren', 'ich habe mein handy verloren'],
+                        keywords: ['habe', 'verloren'],
+                        explanation: '“verlieren”通常用 haben 组成完成时。'
+                    }
+                ],
+                medium: [
+                    {
+                        type: 'input',
+                        prompt: '请填写完成时：Wir ___ nach Berlin gefahren.',
+                        answer: 'sind',
+                        acceptedAnswers: ['sind', 'wir sind nach berlin gefahren', 'sind gefahren'],
+                        keywords: ['sind', 'gefahren'],
+                        explanation: '表示“去某地”时，fahren 常用 sein 形成完成时。'
+                    }
+                ],
+                hard: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择正确的完成时：Sie ___ früh aufgestanden.',
+                        options: ['ist', 'hat', 'sind', 'haben'],
+                        answer: 'ist',
+                        acceptedAnswers: ['ist', 'sie ist', 'sie ist früh aufgestanden'],
+                        keywords: ['ist', 'aufgestanden'],
+                        explanation: '这里是“起床”，常用 sein 组成完成时。'
+                    }
+                ]
+            },
+            'modalverben': {
+                easy: [
+                    {
+                        type: 'input',
+                        prompt: '请填写正确的情态动词：Ich ___ heute nicht arbeiten.',
+                        answer: 'kann',
+                        acceptedAnswers: ['kann', 'ich kann', 'ich kann heute nicht arbeiten'],
+                        keywords: ['kann', 'arbeiten'],
+                        explanation: '这里表达“我今天不能工作”，所以用 können。'
+                    }
+                ],
+                medium: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择正确的情态动词：Du ___ das Auto reparieren.',
+                        options: ['kannst', 'muss', 'will', 'darfst'],
+                        answer: 'kannst',
+                        acceptedAnswers: ['kannst', 'du kannst', 'du kannst das auto reparieren'],
+                        keywords: ['kannst', 'reparieren'],
+                        explanation: '这里表达“你能修好这辆车”，用 kannst。'
+                    }
+                ],
+                hard: [
+                    {
+                        type: 'input',
+                        prompt: '请填写正确的情态动词：Wir ___ morgen früh anfangen.',
+                        answer: 'müssen',
+                        acceptedAnswers: ['müssen', 'wir müssen', 'wir müssen morgen früh anfangen'],
+                        keywords: ['müssen', 'anfangen'],
+                        explanation: '这里表达“我们明天一早必须开始”，使用 müssen。'
+                    }
+                ]
+            },
+            'konjunktiv': {
+                easy: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择更自然的表达：Ich ___ gern ein Kaffee.',
+                        options: ['hätte', 'habe', 'bin', 'werde'],
+                        answer: 'hätte',
+                        acceptedAnswers: ['hätte', 'ich hätte', 'ich hätte gern einen kaffee'],
+                        keywords: ['hätte', 'kaffee'],
+                        explanation: '这里需要虚拟式 II，表达“我想要一杯咖啡”。'
+                    }
+                ],
+                medium: [
+                    {
+                        type: 'input',
+                        prompt: '请填写正确的虚拟式：Wenn ich mehr Zeit ___, würde ich lernen.',
+                        answer: 'hätte',
+                        acceptedAnswers: ['hätte', 'wenn ich mehr zeit hätte', 'hätte mehr zeit'],
+                        keywords: ['hätte', 'zeit'],
+                        explanation: '这里需要虚拟式 II 的 hätte，表示假设。'
+                    }
+                ],
+                hard: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择更自然的表达：Wenn ich reich ___, würde ich reisen.',
+                        options: ['wäre', 'bin', 'habe', 'werde'],
+                        answer: 'wäre',
+                        acceptedAnswers: ['wäre', 'wenn ich reich wäre'],
+                        keywords: ['wäre', 'reich'],
+                        explanation: '这里需要 Konjunktiv II 的 wäre，表示虚拟假设。'
+                    }
+                ]
+            },
+            'passiv': {
+                easy: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择正确的被动语态：Das Buch ___ von vielen gelesen.',
+                        options: ['wird', 'ist', 'hat', 'war'],
+                        answer: 'wird',
+                        acceptedAnswers: ['wird', 'das buch wird', 'wird gelesen'],
+                        keywords: ['wird', 'gelesen'],
+                        explanation: '被动语态通常由 werden + 过去分词构成，这里需要 wird。'
+                    }
+                ],
+                medium: [
+                    {
+                        type: 'input',
+                        prompt: '请填写正确的被动形式：Die Tür ___ gerade geöffnet.',
+                        answer: 'wird',
+                        acceptedAnswers: ['wird', 'die tür wird geöffnet', 'wird gerade geöffnet'],
+                        keywords: ['wird', 'geöffnet'],
+                        explanation: '这里需要被动语态的 werden 形式。'
+                    }
+                ],
+                hard: [
+                    {
+                        type: 'choice',
+                        prompt: '请选择正确的被动表达：Die Arbeit ___ morgen fertig gemacht.',
+                        options: ['wird', 'ist', 'war', 'hat'],
+                        answer: 'wird',
+                        acceptedAnswers: ['wird', 'die arbeit wird', 'wird gemacht'],
+                        keywords: ['wird', 'gemacht'],
+                        explanation: '这里需要被动语态的 werden 形式。'
+                    }
+                ]
+            }
+        };
+
+        const topicButtons = document.querySelectorAll('.topic-btn');
+        const lessonTitle = document.getElementById('lesson-title');
+        const lessonSummary = document.getElementById('lesson-summary');
+        const lessonContent = document.getElementById('lesson-content');
+        const levelPill = document.getElementById('level-pill');
+        const topicPill = document.getElementById('topic-pill');
+        const exercisePrompt = document.getElementById('exercise-prompt');
+        const exerciseOptions = document.getElementById('exercise-options');
+        const exerciseInput = document.getElementById('exercise-input');
+        const feedback = document.getElementById('feedback');
+        const submitBtn = document.getElementById('submit-btn');
+        const continueBtn = document.getElementById('continue-btn');
+        const practiceStatus = document.getElementById('practice-status');
+        const difficultyPill = document.getElementById('difficulty-pill');
+        const streakPill = document.getElementById('streak-pill');
+        const mistakeList = document.getElementById('mistake-list');
+        const aiAdvice = document.getElementById('ai-advice');
+        const judgeNote = document.getElementById('judge-note');
+
+        let currentTopic = 'sein-haben';
+        let currentExercise = null;
+        let practiceStreak = 0;
+        let practiceTarget = 3;
+        let currentDifficulty = 'easy';
+        let exerciseIndexByDifficulty = { easy: 0, medium: 0, hard: 0 };
+        let mistakeBook = [];
+
+        function getDifficultyLabel(level) {
+            if (level === 'medium') return '进阶';
+            if (level === 'hard') return '挑战';
+            return '基础';
+        }
+
+        function normalizeAnswer(text) {
+            return (text || '').toLowerCase().replace(/[^\wäöüß\s]/g, ' ').replace(/\s+/g, ' ').trim();
+        }
+
+        function evaluateAnswer(userAnswer, exercise) {
+            const normalized = normalizeAnswer(userAnswer);
+            const expected = normalizeAnswer(exercise.answer);
+            const accepted = (exercise.acceptedAnswers || []).map(normalizeAnswer);
+            const keywords = (exercise.keywords || []).map(normalizeAnswer);
+
+            const exactMatch = normalized === expected;
+            const acceptedMatch = accepted.some((item) => normalized === item || normalized.includes(item) || item.includes(normalized));
+            const keywordMatch = keywords.length > 0 && keywords.every((item) => normalized.includes(item));
+            const flexibleMatch = keywordMatch && normalized.length >= 3;
+            const isCorrect = exactMatch || acceptedMatch || flexibleMatch;
+
+            return {
+                correct: isCorrect,
+                flexible: !exactMatch && (acceptedMatch || flexibleMatch)
+            };
+        }
+
+        function updatePracticeStatus() {
+            practiceStatus.textContent = `当前进度：${practiceStreak}/${practiceTarget} 连续正确`;
+            difficultyPill.textContent = `难度：${getDifficultyLabel(currentDifficulty)}`;
+            streakPill.textContent = `连对：${practiceStreak}`;
+        }
+
+        function renderMistakes() {
+            if (!mistakeBook.length) {
+                mistakeList.innerHTML = '<li class="mistake-empty">目前还没有错题，继续练习就会积累这里的内容。</li>';
+                return;
+            }
+
+            mistakeList.innerHTML = '';
+            mistakeBook.forEach((item) => {
+                const li = document.createElement('li');
+                li.className = 'mistake-item';
+                const topicLabel = lessonData[item.topic]?.topic || '当前主题';
+                li.innerHTML = `
+                    <div>
+                        <strong>${topicLabel}</strong>
+                        <p>${item.prompt}</p>
+                        <p class="mistake-answer">正确答案：${item.answer}</p>
+                    </div>
+                    <button class="small-btn" data-topic="${item.topic}">重做</button>
+                `;
+                li.querySelector('.small-btn').addEventListener('click', () => {
+                    renderTopic(item.topic);
+                });
+                mistakeList.appendChild(li);
+            });
+        }
+
+        function updateAdvice() {
+            const topicLabel = lessonData[currentTopic]?.topic || '当前主题';
+            let advice = `你正在学习 ${topicLabel}。`;
+
+            if (mistakeBook.length >= 2) {
+                advice += ` 你已经积累了 ${mistakeBook.length} 道错题，建议先回顾这些题目并把常见规则记熟。`;
+            } else if (practiceStreak >= 2) {
+                advice += ' 你的正确率正在上升，建议继续保持节奏并挑战更复杂的句型。';
+            } else if (currentDifficulty === 'hard') {
+                advice += ' 当前处于挑战模式，建议把重点放在理解规则和语法逻辑上。';
+            } else {
+                advice += ' 建议先稳扎稳打，先把关键词和基础结构记住，再进入更高难度。';
+            }
+
+            aiAdvice.textContent = advice;
+        }
+
+        function renderExercise(exercise) {
+            currentExercise = exercise;
+            exercisePrompt.textContent = exercise.prompt;
+            feedback.style.display = 'none';
+            feedback.className = 'result-box';
+            exerciseInput.value = '';
+            exerciseInput.style.display = exercise.type === 'input' ? 'block' : 'none';
+
+            if (exercise.type === 'choice') {
+                exerciseOptions.innerHTML = '';
+                exercise.options.forEach((option) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = option;
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.option-btn').forEach((el) => el.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        exerciseInput.value = option;
+                    });
+                    exerciseOptions.appendChild(btn);
+                });
+            } else {
+                exerciseOptions.innerHTML = '';
+            }
+        }
+
+        function loadNextExercise() {
+            const pool = exerciseData[currentTopic]?.[currentDifficulty] || [];
+            if (!pool.length) return;
+            const exercise = pool[exerciseIndexByDifficulty[currentDifficulty] % pool.length];
+            exerciseIndexByDifficulty[currentDifficulty] += 1;
+            renderExercise(exercise);
+        }
+
+        function renderTopic(topic) {
+            const lesson = lessonData[topic];
+            if (!lesson) return;
+            lessonTitle.textContent = lesson.title;
+            lessonSummary.textContent = lesson.summary;
+            lessonContent.innerHTML = lesson.content;
+            levelPill.textContent = lesson.level;
+            topicPill.textContent = lesson.topic;
+            currentTopic = topic;
+            currentDifficulty = 'easy';
+            practiceStreak = 0;
+            exerciseIndexByDifficulty = { easy: 0, medium: 0, hard: 0 };
+            updatePracticeStatus();
+            updateAdvice();
+            loadNextExercise();
+        }
+
+        topicButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                topicButtons.forEach((b) => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentTopic = btn.dataset.topic;
+                renderTopic(currentTopic);
+            });
+        });
+
+        submitBtn.addEventListener('click', () => {
+            if (!currentExercise) return;
+            const userAnswer = (exerciseInput.value || '').trim();
+            const result = evaluateAnswer(userAnswer, currentExercise);
+            feedback.style.display = 'block';
+            feedback.className = `result-box ${result.correct ? 'correct' : 'wrong'}`;
+
+            if (result.correct) {
+                practiceStreak += 1;
+                if (practiceStreak >= practiceTarget && currentDifficulty !== 'hard') {
+                    currentDifficulty = currentDifficulty === 'easy' ? 'medium' : 'hard';
+                    practiceStreak = 0;
+                }
+                if (result.flexible) {
+                    feedback.innerHTML = `<strong>AI 判定为正确：你的表达语法通顺并且意思成立。</strong><br>${currentExercise.explanation}`;
+                } else {
+                    feedback.innerHTML = `<strong>回答正确！</strong><br>${currentExercise.explanation}`;
+                }
+            } else {
+                practiceStreak = 0;
+                currentDifficulty = currentDifficulty === 'hard' ? 'medium' : 'easy';
+                mistakeBook.push({
+                    topic: currentTopic,
+                    prompt: currentExercise.prompt,
+                    answer: currentExercise.answer,
+                    explanation: currentExercise.explanation
+                });
+                feedback.innerHTML = `<strong>再试一次。</strong><br>正确答案是：${currentExercise.answer}<br>${currentExercise.explanation}`;
+            }
+
+            judgeNote.textContent = result.flexible
+                ? '当前判定：AI 认为你的回答表达自然且语法通顺，所以已视为正确。'
+                : '当前判定：系统会继续关注语法和表达是否通顺。';
+
+            renderMistakes();
+            updateAdvice();
+            updatePracticeStatus();
+        });
+
+        continueBtn.addEventListener('click', () => {
+            loadNextExercise();
+            feedback.style.display = 'none';
+            feedback.className = 'result-box';
+        });
+
+        renderMistakes();
+        updateAdvice();
+        renderTopic(currentTopic);
+    </script>
+</body>
+</html>
