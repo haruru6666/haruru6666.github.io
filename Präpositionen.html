@@ -28,12 +28,21 @@
         }
 
         .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
-            padding: 0 4px;
+            padding: 8px 4px;
             gap: 16px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(109, 93, 252, 0.1);
+            margin: 0 -16px 14px;
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
         .top-nav {
