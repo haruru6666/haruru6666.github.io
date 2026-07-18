@@ -270,15 +270,13 @@
                     });
             }, []);
 
-            // Build tree data
+            // Build tree data: 一级=模块，二级=具体介词
             const treeData = useMemo(() => {
                 const modMap = {};
                 allData.forEach(prep => {
                     const mod = prep['模块'] || '其他';
-                    const topic = prep['主题'] || '其他';
-                    if (!modMap[mod]) modMap[mod] = new Map();
-                    if (!modMap[mod].has(topic)) modMap[mod].set(topic, 0);
-                    modMap[mod].set(topic, modMap[mod].get(topic) + 1);
+                    if (!modMap[mod]) modMap[mod] = [];
+                    modMap[mod].push(prep);
                 });
 
                 const sortedMods = Object.keys(modMap).sort((a, b) => {
@@ -291,17 +289,19 @@
                 });
 
                 return sortedMods.map(mod => {
-                    const topicMap = modMap[mod];
-                    const sortedTopics = Array.from(topicMap.entries())
-                        .sort((a, b) => a[0].localeCompare(b[0]));
+                    const preps = modMap[mod];
+                    // 按介词名称排序
+                    const sortedPreps = [...preps].sort((a, b) =>
+                        (a['介词/结构'] || '').localeCompare(b['介词/结构'] || '')
+                    );
 
                     return {
-                        title: `${MODULE_ICONS[mod] || '📌'} ${mod}`,
+                        title: `${MODULE_ICONS[mod] || '📌'} ${mod} (${sortedPreps.length})`,
                         key: mod,
                         selectable: true,
-                        children: sortedTopics.map(([topic, count]) => ({
-                            title: `${topic} (${count})`,
-                            key: `${mod}::${topic}`,
+                        children: sortedPreps.map(prep => ({
+                            title: prep['介词/结构'] || '?',
+                            key: `prep::${prep['ID']}`,
                             isLeaf: true,
                         })),
                     };
@@ -320,31 +320,22 @@
             // Compute filtered data
             const filteredData = useMemo(() => {
                 if (selectedKeys.length === 0) {
-                    // Nothing selected => show nothing
                     return [];
                 }
 
                 const selectedKey = selectedKeys[0];
 
-                // Determine selected topics
-                let selectedTopics = new Set();
-                if (selectedKey.includes('::')) {
-                    // A specific topic
-                    selectedTopics.add(selectedKey);
-                } else {
-                    // A module — select all its topics
-                    const mod = selectedKey;
-                    treeData.find(n => n.key === mod)?.children?.forEach(ch => {
-                        selectedTopics.add(ch.key);
-                    });
-                }
-
                 return allData.filter(prep => {
-                    const mod = prep['模块'] || '其他';
-                    const topic = prep['主题'] || '其他';
-                    const topicKey = `${mod}::${topic}`;
-
-                    if (!selectedTopics.has(topicKey)) return false;
+                    // 判断是选中了模块还是具体介词
+                    if (selectedKey.startsWith('prep::')) {
+                        // 选中具体介词
+                        const prepId = selectedKey.replace('prep::', '');
+                        if (prep['ID'] !== prepId) return false;
+                    } else {
+                        // 选中模块
+                        const mod = prep['模块'] || '其他';
+                        if (mod !== selectedKey) return false;
+                    }
 
                     if (searchText) {
                         const s = searchText.toLowerCase();
@@ -363,13 +354,15 @@
                 });
             }, [allData, selectedKeys, searchText, cefrFilter, treeData]);
 
-            // Group filtered data by module
+            // Group filtered data by module > topic (主题作为分组标题)
             const groupedData = useMemo(() => {
                 const groups = {};
                 filteredData.forEach(prep => {
                     const mod = prep['模块'] || '其他';
-                    if (!groups[mod]) groups[mod] = [];
-                    groups[mod].push(prep);
+                    const topic = prep['主题'] || '其他';
+                    if (!groups[mod]) groups[mod] = {};
+                    if (!groups[mod][topic]) groups[mod][topic] = [];
+                    groups[mod][topic].push(prep);
                 });
                 return groups;
             }, [filteredData]);
@@ -388,6 +381,7 @@
                 const sortedMods = getSortedModules(allData);
                 if (sortedMods.length > 0) {
                     setSelectedKeys([sortedMods[0]]);
+                    setExpandedKeys(sortedMods);
                 }
                 setSearchText('');
                 setCefrFilter(undefined);
@@ -460,7 +454,7 @@
                                                 <a onClick={() => { handleReset(); setMobileSidebarOpen(false); }} style={{ fontSize: 13, cursor: 'pointer' }}>重置</a>
                                             </div>
                                             <div style={{ padding: '4px 12px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
-                                                已选 <Text strong>{selectedKeys.length ? selectedKeys[0].includes('::') ? 1 : treeData.find(n => n.key === selectedKeys[0])?.children?.length || 0 : 0}</Text> 项
+                                                已选 <Text strong>{selectedKeys.length ? selectedKeys[0].startsWith('prep::') ? 1 : treeData.find(n => n.key === selectedKeys[0])?.children?.length || 0 : 0}</Text> 项
                                             </div>
                                             {sidebarContent}
                                         </div>
@@ -482,7 +476,7 @@
                                     <a onClick={handleReset} style={{ fontSize: 13, cursor: 'pointer' }}>重置</a>
                                 </div>
                                 <div style={{ padding: '4px 16px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
-                                    已选 <Text strong>{selectedKeys.length ? selectedKeys[0].includes('::') ? 1 : treeData.find(n => n.key === selectedKeys[0])?.children?.length || 0 : 0}</Text> 项
+                                    已选 <Text strong>{selectedKeys.length ? selectedKeys[0].startsWith('prep::') ? 1 : treeData.find(n => n.key === selectedKeys[0])?.children?.length || 0 : 0}</Text> 项
                                 </div>
                                 {sidebarContent}
                             </Sider>
@@ -530,20 +524,23 @@
                                     <div style={{ marginBottom: 16 }}>
                                         <Space wrap>
                                             {selectedKeys.map(key => {
-                                                if (key.includes('::')) {
-                                                    const [mod, topic] = key.split('::');
+                                                if (key.startsWith('prep::')) {
+                                                    const prepId = key.replace('prep::', '');
+                                                    const prep = allData.find(p => p['ID'] === prepId);
+                                                    const prepName = prep ? prep['介词/结构'] : key;
+                                                    const modName = prep ? prep['模块'] : '';
                                                     return (
                                                         <Tag key={key} closable onClose={() => {
                                                             const sortedMods = getSortedModules(allData);
                                                             setSelectedKeys(sortedMods.length > 0 ? [sortedMods[0]] : []);
                                                         }}>
-                                                            {mod} › {topic}
+                                                            {modName} › {prepName}
                                                         </Tag>
                                                     );
                                                 }
                                                 return (
                                                     <Tag key={key} color="blue">
-                                                        {key}（全部主题）
+                                                        {key}（全部介词）
                                                     </Tag>
                                                 );
                                             })}
@@ -579,13 +576,18 @@
                                 {filteredData.length === 0 ? (
                                     <Empty description="没有找到匹配的介词，请尝试其他筛选条件。" />
                                 ) : (
-                                    Object.entries(groupedData).map(([modName, preps]) => (
+                                    Object.entries(groupedData).map(([modName, topicMap]) => (
                                         <div key={modName} style={{ marginBottom: 32 }}>
                                             <Title level={4} style={{ color: '#1890ff', marginBottom: 16 }}>
-                                                {modName} ({preps.length})
+                                                {modName}
                                             </Title>
-                                            <Row gutter={[16, 16]}>
-                                                {preps.map(prep => {
+                                            {Object.entries(topicMap).map(([topicName, preps]) => (
+                                                <div key={topicName} style={{ marginBottom: 20 }}>
+                                                    <Title level={5} style={{ color: 'rgba(0,0,0,0.65)', marginBottom: 12, paddingLeft: 8, borderLeft: '3px solid #d9d9d9' }}>
+                                                        {topicName} ({preps.length})
+                                                    </Title>
+                                                    <Row gutter={[16, 16]}>
+                                                        {preps.map(prep => {
                                                     const cefrLevel = prep['CEFR'] || '';
                                                     const cefr = cefrLevel.split('-')[0];
                                                     let cefrColor = 'green';
@@ -679,15 +681,17 @@
                                                             </Card>
                                                         </Col>
                                                     );
-                                                })}
-                                            </Row>
+                                                        })}
+                                                    </Row>
+                                                </div>
+                                            ))}
                                         </div>
                                     ))
                                 )}
 
                                 {/* Footer */}
                                 <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid #f0f0f0', textAlign: 'center', color: 'rgba(0,0,0,0.45)', fontSize: 13 }}>
-                                    <p>💡 提示：左侧树形结构支持按模块和主题双级筛选，单选模式切换模块或主题即可精确过滤。</p>
+                                    <p>💡 提示：左侧树形结构一级为模块分类，二级为具体介词，点击即可查看详细信息。原主题分类作为内容标题展示。</p>
                                     <p>数据来源：德语介词 C1 知识库</p>
                                 </div>
                             </div>
