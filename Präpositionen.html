@@ -62,8 +62,8 @@
         }
 
         .layout-sider {
-            background: #fff !important;
-            border-radius: 8px;
+            background: transparent !important;
+            border-radius: 0;
             overflow: hidden;
         }
 
@@ -96,7 +96,13 @@
         }
 
         .sider-tree-wrapper .ant-tree-node-selected {
-            background: #e6f7ff !important;
+            background: transparent !important;
+            color: #1890ff !important;
+            font-weight: 600;
+        }
+
+        .sider-tree-wrapper .ant-tree-node-selected .ant-tree-title {
+            color: #1890ff !important;
         }
 
         .content-area {
@@ -576,7 +582,7 @@
                             </div>
                         </div>
 
-                    <Layout style={{ background: 'transparent', gap: 24 }}>
+                    <Layout style={{ background: 'transparent', gap: 0 }}>
                         {/* Sidebar */}
                         {isMobile ? (
                             <>
@@ -606,9 +612,8 @@
                                         >
                                             <div className="sider-header">
                                                 模块 · 主题
-                                                <a onClick={() => { handleReset(); setMobileSidebarOpen(false); }} style={{ fontSize: 13, cursor: 'pointer' }}>重置</a>
                                             </div>
-                                                <div style={{ padding: '4px 12px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
+                                                <div style={{ padding: '4px 12px 12px', fontSize: 13, color: 'rgba(0,0,0,0.65)' }}>
                                                     共 <Text strong style={{ color: '#1890ff' }}>{uniquePrepCount}</Text> 个介词
                                                 </div>
                                             {sidebarContent}
@@ -618,8 +623,8 @@
                             </>
                         ) : (
                             <Sider
-                                width={300}
-                                style={{ background: '#fff', borderRadius: 8, padding: '0 0 16px' }}
+                                width={260}
+                                style={{ background: 'transparent', padding: '0 0 16px' }}
                                 collapsible
                                 collapsed={siderCollapsed}
                                 onCollapse={setSiderCollapsed}
@@ -628,9 +633,8 @@
                             >
                                 <div className="sider-header">
                                     模块 · 主题
-                                    <a onClick={handleReset} style={{ fontSize: 13, cursor: 'pointer' }}>重置</a>
                                 </div>
-                                                <div style={{ padding: '4px 16px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
+                                                <div style={{ padding: '4px 16px 12px', fontSize: 13, color: 'rgba(0,0,0,0.65)' }}>
                                                     共 <Text strong style={{ color: '#1890ff' }}>{uniquePrepCount}</Text> 个介词
                                                 </div>
                                 {sidebarContent}
@@ -756,7 +760,7 @@
                                                         ) : (
                                                             /* 多个介词/搭配：竖 Tab 切换 */
                                                             <Tabs
-                                                                tabPosition={isMobile ? 'top' : 'right'}
+                                                                tabPosition={isMobile ? 'top' : 'left'}
                                                                 defaultActiveKey={preps[0]['ID']}
                                                                 style={{ minHeight: 200 }}
                                                             >
