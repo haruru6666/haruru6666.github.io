@@ -26,9 +26,19 @@
             padding: 24px 16px;
         }
 
-        .top-nav {
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 16px;
             padding: 0 8px;
+            gap: 16px;
+        }
+
+        .top-nav {
+            display: flex;
+            align-items: center;
+            gap: 0;
         }
 
         .top-nav a {
@@ -39,11 +49,16 @@
             font-weight: 500;
             text-decoration: none;
             transition: color 0.2s;
+            white-space: nowrap;
         }
 
         .top-nav a:hover,
         .top-nav a.active {
             color: #1890ff;
+        }
+
+        .top-bar-search {
+            flex-shrink: 0;
         }
 
         .layout-sider {
@@ -120,10 +135,9 @@
 
         /* Tab pane content card */
         .tab-detail-card {
-            border: 1px solid #f0f0f0;
             border-radius: 8px;
             padding: 20px 24px;
-            background: #fafafa;
+            background: #fff;
         }
 
         .tab-detail-header {
@@ -530,13 +544,37 @@
 
             return (
                 <div className="app-container">
-                    {/* Top Nav */}
-                    <div className="top-nav">
-                        <a href="index.html">首页</a>
-                        <a href="about.html">About</a>
-                        <a href="DeutschLernen.html">Deutsch lernen</a>
-                        <a href="online-practice.html">在线练习</a>
-                    </div>
+                        {/* Top Bar: Nav + Search */}
+                        <div className="top-bar">
+                            <div className="top-nav">
+                                <a href="index.html">首页</a>
+                                <a href="about.html">About</a>
+                                <a href="DeutschLernen.html">Deutsch lernen</a>
+                                <a href="online-practice.html">在线练习</a>
+                            </div>
+                            <div className="top-bar-search">
+                                <Space size="small">
+                                    <Input.Search
+                                        placeholder="搜索介词、意义或例句..."
+                                        allowClear
+                                        value={searchText}
+                                        onChange={e => setSearchText(e.target.value)}
+                                        style={{ width: 280 }}
+                                    />
+                                    <Select
+                                        placeholder="CEFR"
+                                        allowClear
+                                        value={cefrFilter}
+                                        onChange={setCefrFilter}
+                                        style={{ width: 100 }}
+                                    >
+                                        {cefrLevels.map(l => (
+                                            <Option key={l} value={l}>{l}</Option>
+                                        ))}
+                                    </Select>
+                                </Space>
+                            </div>
+                        </div>
 
                     <Layout style={{ background: 'transparent', gap: 24 }}>
                         {/* Sidebar */}
@@ -602,69 +640,22 @@
                         {/* Main Content */}
                         <Content style={{ minWidth: 0 }}>
                             <div className="content-area">
-                                <Breadcrumb style={{ marginBottom: 12 }}>
+                                <Breadcrumb style={{ marginBottom: 8 }}>
                                     <Breadcrumb.Item>
                                         <a href="Grammatik.html">Grammatik</a>
                                     </Breadcrumb.Item>
                                     <Breadcrumb.Item>介词登记</Breadcrumb.Item>
                                 </Breadcrumb>
 
-                                <Title level={2} style={{ marginTop: 4 }}>介词登记</Title>
-                                <Paragraph type="secondary">
-                                    这是一份系统整理的德语介词知识库，涵盖 A1 到 C1 级别。左侧可按模块和主题进行树级筛选，右侧展示匹配结果。
-                                </Paragraph>
-
-                                {/* Controls */}
-                                <Space style={{ marginBottom: 16, width: '100%' }} size="middle">
-                                    <Input.Search
-                                        placeholder="搜索介词、意义或例句..."
-                                        allowClear
-                                        value={searchText}
-                                        onChange={e => setSearchText(e.target.value)}
-                                        style={{ width: isMobile ? '100%' : 320 }}
-                                    />
-                                    <Select
-                                        placeholder="CEFR 级别"
-                                        allowClear
-                                        value={cefrFilter}
-                                        onChange={setCefrFilter}
-                                        style={{ width: 140 }}
-                                    >
-                                        {cefrLevels.map(l => (
-                                            <Option key={l} value={l}>{l}</Option>
-                                        ))}
-                                    </Select>
-                                </Space>
-
-                                {/* Active filter chips */}
-                                {selectedKeys.length > 0 && (
-                                    <div style={{ marginBottom: 16 }}>
-                                        <Space wrap>
-                                            {(() => {
-                                                const key = selectedKeys[0];
-                                                const [mod, topic] = key.split('::');
-                                                return (
-                                                    <Tag key={key} closable onClose={handleReset}>
-                                                        {mod} › {topic}（{filteredData.length} 项）
-                                                    </Tag>
-                                                );
-                                            })()}
-                                        </Space>
-                                    </div>
-                                )}
-
                                 {/* Divider */}
                                 <div style={{ borderTop: '1px solid #f0f0f0', marginBottom: 12 }} />
 
-                                {/* Results: 模块标题 > 主题标题 > 介词/搭配（竖Tab） > 详情 */}
+                                {/* Results: 介词/搭配（竖Tab） > 详情 */}
                                 {filteredData.length === 0 ? (
                                     <Empty description="没有找到匹配的介词，请尝试其他筛选条件。" />
                                 ) : (
                                     Object.entries(groupedData).map(([modName, topicMap]) => (
-                                        <div key={modName} style={{ marginBottom: 32 }}>
-                                            <Title level={4} style={{ color: '#1890ff', marginBottom: 20, marginTop: 0 }}>
-                                                {modName}
-                                            </Title>
+                                        <div key={modName}>
                                             {Object.entries(topicMap).map(([topicName, preps]) => {
                                                 // 渲染详情卡片
                                                 const renderPrepDetail = (prep) => {
@@ -757,22 +748,15 @@
                                                     );
                                                 };
 
-                                                // 主题标题
                                                 return (
                                                     <div key={topicName} style={{ marginBottom: 24 }}>
-                                                        <Title level={5} style={{
-                                                            color: 'rgba(0,0,0,0.65)', marginBottom: 12,
-                                                            paddingLeft: 8, borderLeft: '3px solid #d9d9d9'
-                                                        }}>
-                                                            {topicName} ({preps.length})
-                                                        </Title>
                                                         {/* 只有 1 个介词：直接显示详情，不用 tab */}
                                                         {preps.length === 1 ? (
                                                             renderPrepDetail(preps[0])
                                                         ) : (
                                                             /* 多个介词/搭配：竖 Tab 切换 */
                                                             <Tabs
-                                                                tabPosition={isMobile ? 'top' : 'left'}
+                                                                tabPosition={isMobile ? 'top' : 'right'}
                                                                 defaultActiveKey={preps[0]['ID']}
                                                                 style={{ minHeight: 200 }}
                                                             >
