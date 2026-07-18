@@ -841,24 +841,35 @@
         }
 
         function toggleModule(mod, checked) {
-            treeData[mod].forEach(topic => {
-                selectedTopics[`${mod}::${topic}`] = checked;
-            });
-            treeParents[mod] = { checked: checked, indeterminate: false };
+            // Single-select: deselect ALL other modules and topics first
+            for (const key in selectedTopics) {
+                selectedTopics[key] = false;
+            }
+            for (const pm in treeParents) {
+                treeParents[pm] = { checked: false, indeterminate: false };
+            }
+
+            if (checked) {
+                treeData[mod].forEach(topic => {
+                    selectedTopics[`${mod}::${topic}`] = true;
+                });
+                treeParents[mod] = { checked: true, indeterminate: false };
+            }
+
             rebuildTreeAndFilter(mod);
         }
 
         function toggleTopic(mod, topic, checked) {
-            selectedTopics[`${mod}::${topic}`] = checked;
+            // Single-select: deselect ALL other modules and topics first
+            for (const key in selectedTopics) {
+                selectedTopics[key] = false;
+            }
+            for (const pm in treeParents) {
+                treeParents[pm] = { checked: false, indeterminate: false };
+            }
 
-            const allTopics = treeData[mod];
-            const checkedCount = allTopics.filter(t => selectedTopics[`${mod}::${t}`]).length;
-
-            if (checkedCount === 0) {
-                treeParents[mod] = { checked: false, indeterminate: false };
-            } else if (checkedCount === allTopics.length) {
-                treeParents[mod] = { checked: true, indeterminate: false };
-            } else {
+            if (checked) {
+                selectedTopics[`${mod}::${topic}`] = true;
                 treeParents[mod] = { checked: false, indeterminate: true };
             }
 
