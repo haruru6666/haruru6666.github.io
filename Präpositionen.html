@@ -106,18 +106,20 @@
         .tree-parent {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.5rem 0.4rem;
-            border-radius: 8px;
+            gap: 0.5rem;
+            padding: 0.55rem 0.6rem;
+            border-radius: 10px;
             cursor: pointer;
             transition: background 0.15s;
-            font-weight: 600;
-            font-size: 0.93rem;
+            font-weight: 700;
+            font-size: 0.95rem;
             color: var(--text);
+            background: rgba(109, 93, 252, 0.04);
+            margin-bottom: 2px;
         }
 
         .tree-parent:hover {
-            background: rgba(109, 93, 252, 0.06);
+            background: rgba(109, 93, 252, 0.1);
         }
 
         .tree-toggle {
@@ -684,12 +686,30 @@
                 treeData[mod] = Array.from(treeData[mod]).sort();
             }
 
-            // Initialize all topics as selected
+            // Initialize only the first module as selected (default single-select)
+            const sortedMods = Object.keys(treeData).sort((a, b) => {
+                const order = ['空间介词', 'Wechselpräpositionen', 'Dativ介词', 'Akkusativ介词', 'Genitiv介词', '时间介词', '动词+介词', '名词/形容词+介词', '高级书面表达'];
+                const ia = order.indexOf(a);
+                const ib = order.indexOf(b);
+                if (ia !== -1 && ib !== -1) return ia - ib;
+                if (ia !== -1) return -1;
+                if (ib !== -1) return 1;
+                return a.localeCompare(b);
+            });
+
             for (const mod in treeData) {
                 treeData[mod].forEach(topic => {
-                    selectedTopics[`${mod}::${topic}`] = true;
+                    selectedTopics[`${mod}::${topic}`] = false;
                 });
-                treeParents[mod] = { checked: true, indeterminate: false };
+                treeParents[mod] = { checked: false, indeterminate: false };
+            }
+
+            if (sortedMods.length > 0) {
+                const firstMod = sortedMods[0];
+                treeData[firstMod].forEach(topic => {
+                    selectedTopics[`${firstMod}::${topic}`] = true;
+                });
+                treeParents[firstMod] = { checked: true, indeterminate: false };
             }
         }
 
