@@ -24,25 +24,26 @@
         .app-container {
             max-width: 1500px;
             margin: 0 auto;
-            padding: 20px 16px;
+            padding: 60px 16px 20px;
         }
 
         .top-bar {
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 100;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 4px;
+            width: 100%;
+            max-width: 1500px;
+            padding: 8px 16px;
             gap: 16px;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(109, 93, 252, 0.1);
-            margin: 0 -16px 14px;
-            padding-left: 16px;
-            padding-right: 16px;
+            border-bottom: 1px solid rgba(109, 93, 252, 0.12);
         }
 
         .top-nav {
