@@ -349,11 +349,22 @@
                     .then(res => res.json())
                     .then(data => {
                         setAllData(data);
-                        // Default: select first module
+                        // Default: select first topic of first module
                         const sortedMods = getSortedModules(data);
                         if (sortedMods.length > 0) {
-                            setSelectedKeys([sortedMods[0]]);
                             setExpandedKeys(sortedMods);
+                            // Find first topic of first module
+                            const firstMod = sortedMods[0];
+                            const topicSet = new Set();
+                            data.forEach(p => {
+                                if ((p['模块'] || '其他') === firstMod) {
+                                    topicSet.add(p['主题'] || '其他');
+                                }
+                            });
+                            const sortedTopics = Array.from(topicSet).sort();
+                            if (sortedTopics.length > 0) {
+                                setSelectedKeys([`${firstMod}::${sortedTopics[0]}`]);
+                            }
                         }
                         setLoading(false);
                     })
@@ -363,7 +374,7 @@
                     });
             }, []);
 
-            // Build tree data: 一级模块 → 二级主题（三级介词通过右侧 Tab 展示）
+            // Build tree data: 一级模块(不可选) → 二级主题（可选中，控制右侧内容）
             const treeData = useMemo(() => {
                 const modMap = {};
                 allData.forEach(prep => {
@@ -390,7 +401,7 @@
                     return {
                         title: `${MODULE_ICONS[mod] || '📌'} ${mod}`,
                         key: mod,
-                        selectable: true,
+                        selectable: false,
                         children: sortedTopics.map(topic => ({
                             title: `${topic} (${topicMap[topic]})`,
                             key: `${mod}::${topic}`,
@@ -410,7 +421,7 @@
                 return Array.from(set).sort();
             }, [allData]);
 
-            // Compute filtered data
+            // Compute filtered data (only responds to topic selection)
             const filteredData = useMemo(() => {
                 if (selectedKeys.length === 0) {
                     return [];
@@ -418,19 +429,13 @@
 
                 const selectedKey = selectedKeys[0];
 
+                // Always match by module::topic
+                const [selMod, selTopic] = selectedKey.split('::');
+
                 return allData.filter(prep => {
                     const mod = prep['模块'] || '其他';
                     const topic = prep['主题'] || '其他';
-
-                    // 选中主题 (module::topic)
-                    if (selectedKey.includes('::')) {
-                        const [selMod, selTopic] = selectedKey.split('::');
-                        if (mod !== selMod || topic !== selTopic) return false;
-                    }
-                    // 选中模块
-                    else {
-                        if (mod !== selectedKey) return false;
-                    }
+                    if (mod !== selMod || topic !== selTopic) return false;
 
                     if (searchText) {
                         const s = searchText.toLowerCase();
@@ -462,21 +467,38 @@
                 return groups;
             }, [filteredData]);
 
-            // Stats
-            const caseTypes = useMemo(() => new Set(filteredData.map(p => p['支配格']).filter(Boolean)), [filteredData]);
-            const moduleTypes = useMemo(() => new Set(filteredData.map(p => p['模块']).filter(Boolean)), [filteredData]);
+            // Unique preposition count (去重)
+            const uniquePrepCount = useMemo(() => {
+                const names = new Set(allData.map(p => p['介词/结构']).filter(Boolean));
+                return names.size;
+            }, [allData]);
 
+            // Filtered count for sidebar display
+            const filteredCount = filteredData.length;
             const handleTreeSelect = useCallback((keys) => {
                 if (keys.length === 0) return;
-                // Ensure we always have exactly one key selected
-                setSelectedKeys([keys[0]]);
+                const key = keys[0];
+                if (key.includes('::')) {
+                    setSelectedKeys([key]);
+                }
             }, []);
 
             const handleReset = useCallback(() => {
                 const sortedMods = getSortedModules(allData);
                 if (sortedMods.length > 0) {
-                    setSelectedKeys([sortedMods[0]]);
                     setExpandedKeys(sortedMods);
+                    // Select first topic of first module
+                    const firstMod = sortedMods[0];
+                    const topicSet = new Set();
+                    allData.forEach(p => {
+                        if ((p['模块'] || '其他') === firstMod) {
+                            topicSet.add(p['主题'] || '其他');
+                        }
+                    });
+                    const sortedTopics = Array.from(topicSet).sort();
+                    if (sortedTopics.length > 0) {
+                        setSelectedKeys([`${firstMod}::${sortedTopics[0]}`]);
+                    }
                 }
                 setSearchText('');
                 setCefrFilter(undefined);
@@ -549,7 +571,7 @@
                                                 <a onClick={() => { handleReset(); setMobileSidebarOpen(false); }} style={{ fontSize: 13, cursor: 'pointer' }}>重置</a>
                                             </div>
                                                 <div style={{ padding: '4px 12px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
-                                                    已选 <Text strong>{filteredData.length}</Text> 项
+                                                    共 <Text strong style={{ color: '#1890ff' }}>{uniquePrepCount}</Text> 个介词
                                                 </div>
                                             {sidebarContent}
                                         </div>
@@ -571,7 +593,7 @@
                                     <a onClick={handleReset} style={{ fontSize: 13, cursor: 'pointer' }}>重置</a>
                                 </div>
                                                 <div style={{ padding: '4px 16px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
-                                                    已选 <Text strong>{filteredData.length}</Text> 项
+                                                    共 <Text strong style={{ color: '#1890ff' }}>{uniquePrepCount}</Text> 个介词
                                                 </div>
                                 {sidebarContent}
                             </Sider>
@@ -620,20 +642,10 @@
                                         <Space wrap>
                                             {(() => {
                                                 const key = selectedKeys[0];
-                                                if (key.includes('::')) {
-                                                    const [mod, topic] = key.split('::');
-                                                    return (
-                                                        <Tag key={key} closable onClose={() => {
-                                                            const sortedMods = getSortedModules(allData);
-                                                            setSelectedKeys(sortedMods.length > 0 ? [sortedMods[0]] : []);
-                                                        }}>
-                                                            {mod} › {topic}（{filteredData.length} 项）
-                                                        </Tag>
-                                                    );
-                                                }
+                                                const [mod, topic] = key.split('::');
                                                 return (
-                                                    <Tag key={key} color="blue">
-                                                        {key}（全部介词 · {filteredData.length} 项）
+                                                    <Tag key={key} closable onClose={handleReset}>
+                                                        {mod} › {topic}（{filteredData.length} 项）
                                                     </Tag>
                                                 );
                                             })()}
@@ -641,29 +653,8 @@
                                     </div>
                                 )}
 
-                                {/* Stats */}
-                                <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-                                    <Col xs={12} sm={6}>
-                                        <Card size="small">
-                                            <Statistic title="介词总数" value={allData.length} />
-                                        </Card>
-                                    </Col>
-                                    <Col xs={12} sm={6}>
-                                        <Card size="small">
-                                            <Statistic title="筛选结果" value={filteredData.length} valueStyle={{ color: '#1890ff' }} />
-                                        </Card>
-                                    </Col>
-                                    <Col xs={12} sm={6}>
-                                        <Card size="small">
-                                            <Statistic title="支配格类型" value={caseTypes.size} />
-                                        </Card>
-                                    </Col>
-                                    <Col xs={12} sm={6}>
-                                        <Card size="small">
-                                            <Statistic title="分类模块" value={moduleTypes.size} />
-                                        </Card>
-                                    </Col>
-                                </Row>
+                                {/* Divider */}
+                                <div style={{ borderTop: '1px solid #f0f0f0', marginBottom: 12 }} />
 
                                 {/* Results: 模块标题 > 主题标题 > 介词/搭配（竖Tab） > 详情 */}
                                 {filteredData.length === 0 ? (
