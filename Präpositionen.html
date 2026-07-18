@@ -363,13 +363,15 @@
                     });
             }, []);
 
-            // Build tree data: 仅一级模块节点（具体介词通过右侧 Tab 选择）
+            // Build tree data: 一级模块 → 二级主题（三级介词通过右侧 Tab 展示）
             const treeData = useMemo(() => {
                 const modMap = {};
                 allData.forEach(prep => {
                     const mod = prep['模块'] || '其他';
-                    if (!modMap[mod]) modMap[mod] = 0;
-                    modMap[mod]++;
+                    const topic = prep['主题'] || '其他';
+                    if (!modMap[mod]) modMap[mod] = {};
+                    if (!modMap[mod][topic]) modMap[mod][topic] = 0;
+                    modMap[mod][topic]++;
                 });
 
                 const sortedMods = Object.keys(modMap).sort((a, b) => {
@@ -381,12 +383,22 @@
                     return a.localeCompare(b);
                 });
 
-                return sortedMods.map(mod => ({
-                    title: `${MODULE_ICONS[mod] || '📌'} ${mod} (${modMap[mod]})`,
-                    key: mod,
-                    selectable: true,
-                    isLeaf: true,
-                }));
+                return sortedMods.map(mod => {
+                    const topicMap = modMap[mod];
+                    const sortedTopics = Object.keys(topicMap).sort((a, b) => a.localeCompare(b));
+
+                    return {
+                        title: `${MODULE_ICONS[mod] || '📌'} ${mod}`,
+                        key: mod,
+                        selectable: true,
+                        children: sortedTopics.map(topic => ({
+                            title: `${topic} (${topicMap[topic]})`,
+                            key: `${mod}::${topic}`,
+                            selectable: true,
+                            isLeaf: true,
+                        })),
+                    };
+                });
             }, [allData]);
 
             // All CEFR levels
@@ -408,7 +420,17 @@
 
                 return allData.filter(prep => {
                     const mod = prep['模块'] || '其他';
-                    if (mod !== selectedKey) return false;
+                    const topic = prep['主题'] || '其他';
+
+                    // 选中主题 (module::topic)
+                    if (selectedKey.includes('::')) {
+                        const [selMod, selTopic] = selectedKey.split('::');
+                        if (mod !== selMod || topic !== selTopic) return false;
+                    }
+                    // 选中模块
+                    else {
+                        if (mod !== selectedKey) return false;
+                    }
 
                     if (searchText) {
                         const s = searchText.toLowerCase();
@@ -596,9 +618,25 @@
                                 {selectedKeys.length > 0 && (
                                     <div style={{ marginBottom: 16 }}>
                                         <Space wrap>
-                                            <Tag color="blue">
-                                                {selectedKeys[0]}（全部介词 · {filteredData.length} 项）
-                                            </Tag>
+                                            {(() => {
+                                                const key = selectedKeys[0];
+                                                if (key.includes('::')) {
+                                                    const [mod, topic] = key.split('::');
+                                                    return (
+                                                        <Tag key={key} closable onClose={() => {
+                                                            const sortedMods = getSortedModules(allData);
+                                                            setSelectedKeys(sortedMods.length > 0 ? [sortedMods[0]] : []);
+                                                        }}>
+                                                            {mod} › {topic}（{filteredData.length} 项）
+                                                        </Tag>
+                                                    );
+                                                }
+                                                return (
+                                                    <Tag key={key} color="blue">
+                                                        {key}（全部介词 · {filteredData.length} 项）
+                                                    </Tag>
+                                                );
+                                            })()}
                                         </Space>
                                     </div>
                                 )}
