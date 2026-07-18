@@ -4,19 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>介词登记 | Grammatik | haruru666 的德语学习博客</title>
+    <link rel="stylesheet" href="https://unpkg.com/antd@4.24.16/dist/antd.min.css">
     <link rel="stylesheet" href="styles.css">
     <style>
         :root {
-            --bg: #f3f6ff;
-            --surface: rgba(255, 255, 255, 0.9);
-            --text: #1f2937;
-            --muted: #64748b;
-            --accent: #6d5dfc;
-            --border: rgba(109, 93, 252, 0.18);
-            --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
-            --success: #10b981;
-            --warning: #f59e0b;
-            --sidebar-width: 280px;
+            --sidebar-width: 300px;
         }
 
         * { box-sizing: border-box; }
@@ -24,1172 +16,701 @@
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.7;
-            color: var(--text);
-            background: linear-gradient(135deg, #f8f7ff 0%, #eef7ff 100%);
+            background: #f0f2f5;
             min-height: 100vh;
         }
 
-        .container {
-            width: min(1400px, calc(100% - 2rem));
+        .app-container {
+            max-width: 1500px;
             margin: 0 auto;
-            padding: 2rem 0 3rem;
+            padding: 24px 16px;
         }
 
-        .page-layout {
+        .top-nav {
+            margin-bottom: 16px;
+            padding: 0 8px;
+        }
+
+        .top-nav a {
+            display: inline-block;
+            margin-right: 24px;
+            color: rgba(0, 0, 0, 0.65);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .top-nav a:hover,
+        .top-nav a.active {
+            color: #1890ff;
+        }
+
+        .layout-sider {
+            background: #fff !important;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .sider-header {
+            padding: 16px 16px 0;
+            font-weight: 600;
+            font-size: 16px;
+            color: rgba(0, 0, 0, 0.85);
             display: flex;
-            gap: 2rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sider-tree-wrapper {
+            padding: 8px 4px;
+            max-height: calc(100vh - 180px);
+            overflow-y: auto;
+        }
+
+        .sider-tree-wrapper .ant-tree {
+            background: transparent;
+        }
+
+        .sider-tree-wrapper .ant-tree-treenode {
+            padding: 2px 0;
+        }
+
+        .sider-tree-wrapper .ant-tree-node-content-wrapper {
+            transition: color 0.2s;
+        }
+
+        .sider-tree-wrapper .ant-tree-node-selected {
+            background: #e6f7ff !important;
+        }
+
+        .content-area {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .content-area .ant-card {
+            border-radius: 8px;
+            transition: box-shadow 0.3s;
+        }
+
+        .content-area .ant-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .prep-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .prep-card-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1890ff;
+            font-family: 'SF Mono', 'Courier New', monospace;
+        }
+
+        .prep-card-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .prep-field {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
             align-items: flex-start;
         }
 
-        /* ===== Sidebar ===== */
-        .sidebar {
-            width: var(--sidebar-width);
-            min-width: var(--sidebar-width);
-            position: sticky;
-            top: 1rem;
-            max-height: calc(100vh - 2rem);
-            overflow-y: auto;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            background: var(--surface);
-            box-shadow: var(--shadow);
-            padding: 1.5rem;
-            scrollbar-width: thin;
-        }
-
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 2px;
-        }
-
-        .sidebar-header {
-            font-weight: 700;
-            font-size: 1.05rem;
-            color: var(--text);
-            margin-bottom: 1.2rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .sidebar-reset {
-            font-size: 0.8rem;
-            color: var(--accent);
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-weight: 600;
-        }
-
-        .sidebar-reset:hover {
-            text-decoration: underline;
-        }
-
-        .sidebar-stats {
-            font-size: 0.8rem;
-            color: var(--muted);
-            margin-bottom: 1rem;
-        }
-
-        /* ===== Tree ===== */
-        .tree-node {
-            user-select: none;
-        }
-
-        .tree-parent {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.55rem 0.6rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.15s;
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--text);
-            background: rgba(109, 93, 252, 0.04);
-            margin-bottom: 2px;
-        }
-
-        .tree-parent:hover {
-            background: rgba(109, 93, 252, 0.1);
-        }
-
-        .tree-toggle {
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            transition: transform 0.2s;
-            color: var(--muted);
-            flex-shrink: 0;
-        }
-
-        .tree-toggle.collapsed {
-            transform: rotate(-90deg);
-        }
-
-        .tree-children {
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .tree-children.collapsed {
-            max-height: 0 !important;
-        }
-
-        .tree-child {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.35rem 0.4rem 0.35rem 1.8rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.15s;
-            font-size: 0.88rem;
-            color: var(--text);
-        }
-
-        .tree-child:hover {
-            background: rgba(109, 93, 252, 0.05);
-        }
-
-        .tree-child.active {
-            background: rgba(109, 93, 252, 0.1);
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .tree-child .count {
-            margin-left: auto;
-            font-size: 0.75rem;
-            color: var(--muted);
-            background: rgba(109, 93, 252, 0.08);
-            padding: 0.1rem 0.45rem;
-            border-radius: 10px;
-        }
-
-        .tree-checkbox {
-            appearance: none;
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            border: 2px solid var(--border);
-            border-radius: 4px;
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: all 0.15s;
-            position: relative;
-        }
-
-        .tree-checkbox:checked {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .tree-checkbox:checked::after {
-            content: '';
-            position: absolute;
-            left: 4px;
-            top: 1px;
-            width: 5px;
-            height: 9px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-
-        .tree-checkbox:indeterminate {
-            background: var(--accent);
-            border-color: var(--accent);
-            opacity: 0.5;
-        }
-
-        .tree-checkbox:indeterminate::after {
-            content: '';
-            position: absolute;
-            left: 3px;
-            top: 6px;
-            width: 6px;
-            height: 2px;
-            background: white;
-            border-radius: 1px;
-        }
-
-        .tree-parent-label {
-            flex: 1;
-        }
-
-        .tree-icon {
-            font-size: 0.9rem;
-            width: 18px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        /* ===== Main Content ===== */
-        .main-content {
-            flex: 1;
-            min-width: 0;
-            border: 1px solid var(--border);
-            border-radius: 28px;
-            background: var(--surface);
-            box-shadow: var(--shadow);
-            padding: 2rem;
-        }
-
-        .top-link {
-            display: inline-block;
-            margin-bottom: 1rem;
-            text-decoration: none;
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        h1 {
-            margin: 0.3rem 0 0.5rem;
-            font-size: clamp(1.8rem, 2.5vw, 2.5rem);
-        }
-
-        .lead {
-            margin: 0 0 1.5rem;
-            color: var(--muted);
-            font-size: 1.03rem;
-        }
-
-        .controls {
-            display: flex;
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            min-width: 180px;
-            padding: 0.7rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 0.95rem;
-            background: var(--surface);
-            color: var(--text);
-        }
-
-        select {
-            min-width: 140px;
-            padding: 0.7rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 0.95rem;
-            background: var(--surface);
-            color: var(--text);
-        }
-
-        .active-filters-bar {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-            min-height: 0;
-        }
-
-        .filter-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            padding: 0.25rem 0.7rem;
-            border-radius: 14px;
-            font-size: 0.8rem;
-            background: rgba(109, 93, 252, 0.12);
-            color: var(--accent);
+        .prep-field-label {
+            min-width: 90px;
             font-weight: 500;
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 13px;
+            flex-shrink: 0;
         }
 
-        .filter-chip-remove {
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.9rem;
-            line-height: 1;
-            opacity: 0.6;
+        .prep-field-value {
+            color: rgba(0, 0, 0, 0.85);
+            font-size: 14px;
+            line-height: 1.6;
         }
 
-        .filter-chip-remove:hover {
-            opacity: 1;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .stat-card {
-            padding: 0.8rem;
-            border-radius: 12px;
-            background: rgba(109, 93, 252, 0.08);
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--muted);
-            margin-top: 0.2rem;
-        }
-
-        .prepositions-grid {
-            display: grid;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .preposition-card {
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.8);
-            transition: all 0.3s;
-        }
-
-        .preposition-card:hover {
-            box-shadow: 0 8px 20px rgba(109, 93, 252, 0.12);
-            border-color: var(--accent);
-        }
-
-        .prep-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .prep-name {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--accent);
-            font-family: 'Courier New', monospace;
-        }
-
-        .prep-meta {
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.35rem 0.7rem;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .badge-case {
-            background: rgba(109, 93, 252, 0.15);
-            color: var(--accent);
-        }
-
-        .badge-cefr-a {
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--success);
-        }
-
-        .badge-cefr-b {
-            background: rgba(245, 158, 11, 0.15);
-            color: var(--warning);
-        }
-
-        .badge-cefr-c {
-            background: rgba(244, 63, 94, 0.15);
-            color: #f43f5e;
-        }
-
-        .prep-content { margin-bottom: 1rem; }
-
-        .prep-row {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 1rem;
-            margin-bottom: 0.8rem;
-            align-items: start;
-        }
-
-        .prep-label {
-            font-weight: 600;
-            color: var(--muted);
-            font-size: 0.9rem;
-        }
-
-        .prep-value { color: var(--text); }
-
-        .example {
-            margin-top: 0.4rem;
-            padding: 0.5rem 0.8rem;
-            border-left: 3px solid var(--accent);
-            background: rgba(109, 93, 252, 0.06);
-            border-radius: 6px;
-            font-size: 0.95rem;
-            margin-bottom: 0.4rem;
+        .example-block {
+            margin-top: 4px;
+            padding: 8px 12px;
+            border-left: 3px solid #1890ff;
+            background: rgba(24, 144, 255, 0.04);
+            border-radius: 4px;
+            font-size: 14px;
+            margin-bottom: 4px;
         }
 
         .example-level {
-            font-size: 0.8rem;
-            color: var(--muted);
+            font-size: 12px;
+            color: rgba(0, 0, 0, 0.45);
             font-weight: 600;
-            margin-bottom: 0.2rem;
-        }
-
-        .tags-inline {
-            display: flex;
-            gap: 0.4rem;
-            flex-wrap: wrap;
-            margin-top: 0.5rem;
-        }
-
-        .tag-inline {
-            display: inline-block;
-            padding: 0.2rem 0.5rem;
-            border-radius: 6px;
-            background: rgba(109, 93, 252, 0.1);
-            color: var(--accent);
-            font-size: 0.8rem;
-        }
-
-        .module-section { margin-bottom: 2.5rem; }
-
-        .module-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 1.2rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .module-grid {
-            display: grid;
-            gap: 1.5rem;
+            margin-bottom: 2px;
         }
 
         .no-results {
             text-align: center;
-            padding: 3rem 1rem;
-            color: var(--muted);
+            padding: 48px 16px;
+            color: rgba(0, 0, 0, 0.25);
         }
 
-        .no-results-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        .no-results .anticon {
+            font-size: 48px;
+            margin-bottom: 16px;
         }
 
-        footer {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
-            color: var(--muted);
-            text-align: center;
-            font-size: 0.95rem;
-        }
+        /* Mobile */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 8px 4px;
+            }
 
-        /* ===== Mobile ===== */
-        .mobile-sidebar-toggle {
-            display: none;
-        }
+            .ant-layout-sider {
+                position: fixed !important;
+                z-index: 100;
+                height: 100vh;
+                left: 0;
+                top: 0;
+            }
 
-        @media (max-width: 900px) {
-            .page-layout {
+            .content-area {
+                padding: 16px;
+            }
+
+            .prep-field {
                 flex-direction: column;
+                gap: 2px;
             }
 
-            .sidebar {
-                width: 100%;
-                min-width: 0;
-                position: static;
-                max-height: none;
-                padding: 1rem;
-                border-radius: 16px;
-            }
-
-            .mobile-sidebar-toggle {
-                display: block;
-                width: 100%;
-                padding: 0.7rem;
-                border: 1px solid var(--border);
-                border-radius: 12px;
-                background: var(--surface);
-                color: var(--text);
-                font-size: 0.95rem;
-                font-weight: 600;
-                cursor: pointer;
-                text-align: left;
-                margin-bottom: 0.5rem;
-            }
-
-            .sidebar.collapsed-mobile .sidebar-header,
-            .sidebar.collapsed-mobile .sidebar-stats,
-            .sidebar.collapsed-mobile .tree-node {
-                display: none;
-            }
-
-            .main-content {
-                padding: 1.2rem;
-            }
-
-            .prep-row {
-                grid-template-columns: 1fr;
-                gap: 0.3rem;
-            }
-
-            .prep-label {
-                font-weight: 600;
-                font-size: 0.85rem;
-            }
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
+            .prep-field-label {
+                min-width: auto;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <nav class="top-nav" aria-label="主导航" style="margin-bottom: 1.5rem;">
-            <a href="index.html">首页</a>
-            <a href="about.html">About</a>
-            <a href="DeutschLernen.html">Deutsch lernen</a>
-            <a href="online-practice.html">在线练习</a>
-        </nav>
+    <div id="root"></div>
 
-        <div class="page-layout">
-            <!-- ===== Left Sidebar: Tree Filter ===== -->
-            <button class="mobile-sidebar-toggle" id="mobileSidebarToggle" onclick="toggleSidebar()">
-                📂 筛选条件 ▾
-            </button>
-            <aside class="sidebar" id="sidebar">
-                <div class="sidebar-header">
-                    模块 · 主题
-                    <button class="sidebar-reset" onclick="resetFilters()">重置</button>
-                </div>
-                <div class="sidebar-stats">
-                    已选 <strong id="sidebarSelectedCount">全部</strong> 项，共 <strong id="sidebarTotalCount">93</strong> 条
-                </div>
-                <div id="treeContainer"></div>
-            </aside>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/antd@4.24.16/dist/antd.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js" crossorigin></script>
 
-            <!-- ===== Right: Main Content ===== -->
-            <main class="main-content">
-                <a class="top-link" href="Grammatik.html">← 返回 Grammatik</a>
-                <h1>介词登记</h1>
-                <p class="lead">这是一份系统整理的德语介词知识库，涵盖 A1 到 C1 级别。左侧可按模块和主题进行树级筛选，右侧展示匹配结果。</p>
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useCallback, useRef } = React;
+        const {
+            Layout, Tree, Card, Input, Select, Statistic, Tag, Badge, Space,
+            Typography, Row, Col, Breadcrumb, Button, Collapse, Empty, Spin
+        } = antd;
+        const { Sider, Content } = Layout;
+        const { Text, Title, Paragraph } = Typography;
+        const { Option } = Select;
+        const { Panel } = Collapse;
 
-                <div class="controls">
-                    <input type="text" id="searchInput" placeholder="搜索介词、意义或例句..." />
-                    <select id="cefrFilter">
-                        <option value="">所有级别</option>
-                    </select>
-                </div>
+        // ===== Module order + icons =====
+        const MODULE_ORDER = ['空间介词', 'Wechselpräpositionen', 'Dativ介词', 'Akkusativ介词', 'Genitiv介词', '时间介词', '动词+介词', '名词/形容词+介词', '高级书面表达'];
+        const MODULE_ICONS = {
+            '空间介词': '📍',
+            'Wechselpräpositionen': '🔄',
+            'Dativ介词': '📘',
+            'Akkusativ介词': '📕',
+            'Genitiv介词': '📗',
+            '时间介词': '⏰',
+            '动词+介词': '🔗',
+            '名词/形容词+介词': '📝',
+            '高级书面表达': '📖'
+        };
 
-                <div class="active-filters-bar" id="activeFiltersBar"></div>
+        function App() {
+            const [allData, setAllData] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [searchText, setSearchText] = useState('');
+            const [cefrFilter, setCefrFilter] = useState(undefined);
+            const [selectedKeys, setSelectedKeys] = useState([]);
+            const [expandedKeys, setExpandedKeys] = useState([]);
+            const [siderCollapsed, setSiderCollapsed] = useState(false);
+            const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+            const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-                <div class="stats">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalCount">93</div>
-                        <div class="stat-label">介词总数</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="filteredCount">93</div>
-                        <div class="stat-label">筛选结果</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="caseCount">3</div>
-                        <div class="stat-label">支配格类型</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="moduleCount">9</div>
-                        <div class="stat-label">分类模块</div>
-                    </div>
-                </div>
+            useEffect(() => {
+                const handleResize = () => setIsMobile(window.innerWidth < 768);
+                window.addEventListener('resize', handleResize);
+                return () => window.removeEventListener('resize', handleResize);
+            }, []);
 
-                <div id="prepositionsContainer" class="prepositions-grid"></div>
-
-                <div id="noResults" class="no-results" style="display: none;">
-                    <div class="no-results-icon">🔍</div>
-                    <p>没有找到匹配的介词。请尝试其他筛选条件。</p>
-                </div>
-
-                <footer>
-                    <p>💡 提示：左侧树形结构支持按模块和主题双级筛选，点击勾选框即可精确过滤。</p>
-                    <p>数据来源：德语介词 C1 知识库</p>
-                </footer>
-            </main>
-        </div>
-    </div>
-
-    <script>
-        let allPrepositions = [];
-        let treeData = {};         // { moduleName: [topicName, ...] }
-        let selectedTopics = {};   // { "module::topic": true }
-        let treeParents = {};      // { moduleName: { checked, indeterminate } }
-        let cefrSet = new Set();
-
-        // ===== Data Loading =====
-        async function loadData() {
-            try {
-                const response = await fetch('prepositions-data.json');
-                allPrepositions = await response.json();
-                console.log(`Loaded ${allPrepositions.length} prepositions`);
-
-                buildTreeData();
-                buildCefrOptions();
-                buildTree();
-                displayPrepositions(allPrepositions);
-                updateStats(allPrepositions);
-                updateSidebarCounts();
-            } catch (error) {
-                console.error('Error loading data:', error);
-                document.getElementById('prepositionsContainer').innerHTML =
-                    '<p style="color: red;">无法加载数据。请检查 prepositions-data.json 文件。</p>';
-            }
-        }
-
-        function buildTreeData() {
-            treeData = {};
-            selectedTopics = {};
-            treeParents = {};
-
-            allPrepositions.forEach(prep => {
-                const mod = prep['模块'] || '其他';
-                const topic = prep['主题'] || '其他';
-                if (!treeData[mod]) treeData[mod] = new Set();
-                treeData[mod].add(topic);
-            });
-
-            // Convert Sets to sorted arrays
-            for (const mod in treeData) {
-                treeData[mod] = Array.from(treeData[mod]).sort();
-            }
-
-            // Initialize only the first module as selected (default single-select)
-            const sortedMods = Object.keys(treeData).sort((a, b) => {
-                const order = ['空间介词', 'Wechselpräpositionen', 'Dativ介词', 'Akkusativ介词', 'Genitiv介词', '时间介词', '动词+介词', '名词/形容词+介词', '高级书面表达'];
-                const ia = order.indexOf(a);
-                const ib = order.indexOf(b);
-                if (ia !== -1 && ib !== -1) return ia - ib;
-                if (ia !== -1) return -1;
-                if (ib !== -1) return 1;
-                return a.localeCompare(b);
-            });
-
-            for (const mod in treeData) {
-                treeData[mod].forEach(topic => {
-                    selectedTopics[`${mod}::${topic}`] = false;
-                });
-                treeParents[mod] = { checked: false, indeterminate: false };
-            }
-
-            if (sortedMods.length > 0) {
-                const firstMod = sortedMods[0];
-                treeData[firstMod].forEach(topic => {
-                    selectedTopics[`${firstMod}::${topic}`] = true;
-                });
-                treeParents[firstMod] = { checked: true, indeterminate: false };
-            }
-        }
-
-        function buildCefrOptions() {
-            cefrSet = new Set();
-            allPrepositions.forEach(p => {
-                if (p['CEFR']) {
-                    p['CEFR'].split('-').forEach(l => cefrSet.add(l.trim()));
-                }
-            });
-            const sorted = Array.from(cefrSet).sort();
-            const select = document.getElementById('cefrFilter');
-            sorted.forEach(level => {
-                const opt = document.createElement('option');
-                opt.value = level;
-                opt.textContent = level;
-                select.appendChild(opt);
-            });
-        }
-
-        // ===== Tree Rendering =====
-        function buildTree() {
-            const container = document.getElementById('treeContainer');
-            container.innerHTML = '';
-
-            const sortedModules = Object.keys(treeData).sort((a, b) => {
-                // Custom sort: put common modules first
-                const order = ['空间介词', 'Wechselpräpositionen', 'Dativ介词', 'Akkusativ介词', 'Genitiv介词', '时间介词', '动词+介词', '名词/形容词+介词', '高级书面表达'];
-                const ia = order.indexOf(a);
-                const ib = order.indexOf(b);
-                if (ia !== -1 && ib !== -1) return ia - ib;
-                if (ia !== -1) return -1;
-                if (ib !== -1) return 1;
-                return a.localeCompare(b);
-            });
-
-            sortedModules.forEach(mod => {
-                const topics = treeData[mod];
-                const node = document.createElement('div');
-                node.className = 'tree-node';
-
-                // Parent row
-                const parentRow = document.createElement('div');
-                parentRow.className = 'tree-parent';
-
-                const toggle = document.createElement('span');
-                toggle.className = 'tree-toggle';
-                toggle.textContent = '▾';
-                toggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleChildren(node, toggle);
-                });
-
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.className = 'tree-checkbox';
-                checkbox.checked = treeParents[mod].checked;
-                checkbox.indeterminate = treeParents[mod].indeterminate;
-                checkbox.addEventListener('change', () => {
-                    toggleModule(mod, checkbox.checked);
-                });
-
-                const icon = document.createElement('span');
-                icon.className = 'tree-icon';
-                icon.textContent = getModuleIcon(mod);
-
-                const label = document.createElement('span');
-                label.className = 'tree-parent-label';
-                label.textContent = mod;
-
-                parentRow.appendChild(toggle);
-                parentRow.appendChild(checkbox);
-                parentRow.appendChild(icon);
-                parentRow.appendChild(label);
-                node.appendChild(parentRow);
-
-                // Children
-                const childrenDiv = document.createElement('div');
-                childrenDiv.className = 'tree-children';
-                childrenDiv.style.maxHeight = (topics.length * 40 + 8) + 'px';
-
-                topics.forEach(topic => {
-                    const child = document.createElement('div');
-                    child.className = 'tree-child active';
-
-                    const childCb = document.createElement('input');
-                    childCb.type = 'checkbox';
-                    childCb.className = 'tree-checkbox';
-                    childCb.checked = selectedTopics[`${mod}::${topic}`] === true;
-                    childCb.addEventListener('change', (e) => {
-                        e.stopPropagation();
-                        toggleTopic(mod, topic, childCb.checked);
-                    });
-
-                    const childLabel = document.createElement('span');
-                    childLabel.textContent = topic;
-
-                    const count = document.createElement('span');
-                    count.className = 'count';
-                    count.textContent = countPrepsInTopic(mod, topic);
-
-                    child.appendChild(childCb);
-                    child.appendChild(childLabel);
-                    child.appendChild(count);
-
-                    child.addEventListener('click', (e) => {
-                        if (e.target !== childCb) {
-                            const newChecked = !childCb.checked;
-                            childCb.checked = newChecked;
-                            toggleTopic(mod, topic, newChecked);
+            // Load data
+            useEffect(() => {
+                fetch('prepositions-data.json')
+                    .then(res => res.json())
+                    .then(data => {
+                        setAllData(data);
+                        // Default: select first module
+                        const sortedMods = getSortedModules(data);
+                        if (sortedMods.length > 0) {
+                            setSelectedKeys([sortedMods[0]]);
+                            setExpandedKeys(sortedMods);
                         }
+                        setLoading(false);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        setLoading(false);
                     });
+            }, []);
 
-                    childrenDiv.appendChild(child);
+            // Build tree data
+            const treeData = useMemo(() => {
+                const modMap = {};
+                allData.forEach(prep => {
+                    const mod = prep['模块'] || '其他';
+                    const topic = prep['主题'] || '其他';
+                    if (!modMap[mod]) modMap[mod] = new Map();
+                    if (!modMap[mod].has(topic)) modMap[mod].set(topic, 0);
+                    modMap[mod].set(topic, modMap[mod].get(topic) + 1);
                 });
 
-                node.appendChild(childrenDiv);
-                container.appendChild(node);
-            });
-
-            document.getElementById('sidebarTotalCount').textContent = allPrepositions.length;
-        }
-
-        function getModuleIcon(mod) {
-            const icons = {
-                '空间介词': '📍',
-                'Wechselpräpositionen': '🔄',
-                'Dativ介词': '📘',
-                'Akkusativ介词': '📕',
-                'Genitiv介词': '📗',
-                '时间介词': '⏰',
-                '动词+介词': '🔗',
-                '名词/形容词+介词': '📝',
-                '高级书面表达': '📖'
-            };
-            return icons[mod] || '📌';
-        }
-
-        function countPrepsInTopic(mod, topic) {
-            return allPrepositions.filter(p =>
-                p['模块'] === mod && p['主题'] === topic
-            ).length;
-        }
-
-        function toggleChildren(node, toggle) {
-            const children = node.querySelector('.tree-children');
-            children.classList.toggle('collapsed');
-            toggle.classList.toggle('collapsed');
-        }
-
-        function toggleModule(mod, checked) {
-            // Single-select: deselect ALL other modules and topics first
-            for (const key in selectedTopics) {
-                selectedTopics[key] = false;
-            }
-            for (const pm in treeParents) {
-                treeParents[pm] = { checked: false, indeterminate: false };
-            }
-
-            if (checked) {
-                treeData[mod].forEach(topic => {
-                    selectedTopics[`${mod}::${topic}`] = true;
-                });
-                treeParents[mod] = { checked: true, indeterminate: false };
-            }
-
-            rebuildTreeAndFilter(mod);
-        }
-
-        function toggleTopic(mod, topic, checked) {
-            // Single-select: deselect ALL other modules and topics first
-            for (const key in selectedTopics) {
-                selectedTopics[key] = false;
-            }
-            for (const pm in treeParents) {
-                treeParents[pm] = { checked: false, indeterminate: false };
-            }
-
-            if (checked) {
-                selectedTopics[`${mod}::${topic}`] = true;
-                treeParents[mod] = { checked: false, indeterminate: true };
-            }
-
-            rebuildTreeAndFilter(mod);
-        }
-
-        function rebuildTreeAndFilter(affectedModule) {
-            // Update parent checkbox
-            const treeContainer = document.getElementById('treeContainer');
-            const nodes = treeContainer.querySelectorAll('.tree-node');
-            nodes.forEach(node => {
-                const parentRow = node.querySelector('.tree-parent');
-                const label = parentRow.querySelector('.tree-parent-label');
-                const mod = label.textContent.trim();
-
-                const parentCb = parentRow.querySelector('.tree-checkbox');
-                parentCb.checked = treeParents[mod].checked;
-                parentCb.indeterminate = treeParents[mod].indeterminate;
-
-                // Update children
-                const children = node.querySelectorAll('.tree-child');
-                children.forEach(child => {
-                    const topicLabel = child.querySelector('span:not(.count)');
-                    const topic = topicLabel ? topicLabel.textContent.trim() : '';
-                    const childCb = child.querySelector('.tree-checkbox');
-                    const isSelected = selectedTopics[`${mod}::${topic}`] === true;
-                    childCb.checked = isSelected;
-                    child.classList.toggle('active', isSelected);
-                });
-            });
-
-            updateSidebarCounts();
-            filterPrepositions();
-            updateActiveFilterChips();
-        }
-
-        function updateSidebarCounts() {
-            const selectedTopicCount = Object.values(selectedTopics).filter(v => v).length;
-            const totalTopics = Object.values(selectedTopics).length;
-            document.getElementById('sidebarSelectedCount').textContent =
-                selectedTopicCount === totalTopics ? '全部' : selectedTopicCount;
-        }
-
-        function resetFilters() {
-            for (const key in selectedTopics) {
-                selectedTopics[key] = true;
-            }
-            for (const mod in treeParents) {
-                treeParents[mod] = { checked: true, indeterminate: false };
-            }
-            document.getElementById('searchInput').value = '';
-            document.getElementById('cefrFilter').value = '';
-            buildTree(); // Rebuild entire tree
-            updateSidebarCounts();
-            filterPrepositions();
-            updateActiveFilterChips();
-        }
-
-        function updateActiveFilterChips() {
-            const bar = document.getElementById('activeFiltersBar');
-            bar.innerHTML = '';
-
-            const moduleFilterVal = document.getElementById('cefrFilter').value;
-            const activeTopics = [];
-            for (const key in selectedTopics) {
-                if (selectedTopics[key]) activeTopics.push(key);
-            }
-            const totalTopics = Object.keys(selectedTopics).length;
-
-            if (moduleFilterVal) {
-                const chip = document.createElement('span');
-                chip.className = 'filter-chip';
-                chip.innerHTML = `CEFR: ${moduleFilterVal} <span class="filter-chip-remove" onclick="document.getElementById('cefrFilter').value='';filterPrepositions();updateActiveFilterChips();">✕</span>`;
-                bar.appendChild(chip);
-            }
-
-            if (activeTopics.length < totalTopics && activeTopics.length > 0 && activeTopics.length <= 8) {
-                activeTopics.forEach(key => {
-                    const [mod, topic] = key.split('::');
-                    const chip = document.createElement('span');
-                    chip.className = 'filter-chip';
-                    chip.innerHTML = `${mod} › ${topic} <span class="filter-chip-remove" onclick="toggleTopic('${mod.replace(/'/g, "\\'")}','${topic.replace(/'/g, "\\'")}',false);updateActiveFilterChips();">✕</span>`;
-                    bar.appendChild(chip);
-                });
-            }
-        }
-
-        // ===== Display Cards =====
-        function displayPrepositions(preps) {
-            const container = document.getElementById('prepositionsContainer');
-            const noResults = document.getElementById('noResults');
-
-            if (preps.length === 0) {
-                container.style.display = 'none';
-                noResults.style.display = 'block';
-                return;
-            }
-
-            container.style.display = 'grid';
-            noResults.style.display = 'none';
-
-            const modules = {};
-            preps.forEach(prep => {
-                const module = prep['模块'] || '其他';
-                if (!modules[module]) modules[module] = [];
-                modules[module].push(prep);
-            });
-
-            container.innerHTML = '';
-
-            Object.entries(modules).forEach(([moduleName, modulePreps]) => {
-                const moduleDiv = document.createElement('div');
-                moduleDiv.className = 'module-section';
-
-                const moduleTitle = document.createElement('div');
-                moduleTitle.className = 'module-title';
-                moduleTitle.textContent = `${moduleName} (${modulePreps.length})`;
-                moduleDiv.appendChild(moduleTitle);
-
-                const moduleGrid = document.createElement('div');
-                moduleGrid.className = 'module-grid';
-
-                modulePreps.forEach(prep => {
-                    const card = createPrepCard(prep);
-                    moduleGrid.appendChild(card);
+                const sortedMods = Object.keys(modMap).sort((a, b) => {
+                    const ia = MODULE_ORDER.indexOf(a);
+                    const ib = MODULE_ORDER.indexOf(b);
+                    if (ia !== -1 && ib !== -1) return ia - ib;
+                    if (ia !== -1) return -1;
+                    if (ib !== -1) return 1;
+                    return a.localeCompare(b);
                 });
 
-                moduleDiv.appendChild(moduleGrid);
-                container.appendChild(moduleDiv);
-            });
+                return sortedMods.map(mod => {
+                    const topicMap = modMap[mod];
+                    const sortedTopics = Array.from(topicMap.entries())
+                        .sort((a, b) => a[0].localeCompare(b[0]));
 
-            updateStats(preps);
-        }
-
-        function createPrepCard(prep) {
-            const card = document.createElement('div');
-            card.className = 'preposition-card';
-
-            const cefrLevel = prep['CEFR'] || '';
-            const cefr = cefrLevel.split('-')[0];
-            let cefrBadge = 'badge-cefr-a';
-            if (cefr === 'B1' || cefr === 'B2') cefrBadge = 'badge-cefr-b';
-            else if (cefr === 'C1') cefrBadge = 'badge-cefr-c';
-
-            const prepName = prep['介词/结构'] || '';
-            const case_ = prep['支配格'] || '';
-            const meaning = prep['核心意义'] || '';
-            const secondaryMeaning = prep['引申意义'] || '';
-            const collocation = prep['常见搭配'] || '';
-            const thinking = prep['思维模型'] || '';
-            const examples = [
-                { level: 'A1-A2', text: prep['A1-A2例句'] },
-                { level: 'B1-B2', text: prep['B1-B2例句'] },
-                { level: 'C1', text: prep['C1例句'] }
-            ].filter(e => e.text);
-            const tips = prep['记忆提示'] || '';
-            const commonErrors = prep['常见错误'] || '';
-            const confused = prep['易混介词/结构'] || '';
-            const tags = prep['标签'] || '';
-
-            let html = `
-                <div class="prep-header">
-                    <div class="prep-name">${prepName}</div>
-                    <div class="prep-meta">
-                        <span class="badge badge-case">${case_}</span>
-                        <span class="badge ${cefrBadge}">${cefrLevel}</span>`;
-
-            if (prep['是否双向介词'] === '是') {
-                html += `<span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">双向</span>`;
-            }
-
-            html += `</div></div><div class="prep-content">
-                    <div class="prep-row">
-                        <div class="prep-label">模块 · 主题</div>
-                        <div class="prep-value">${prep['模块'] || ''} · ${prep['主题'] || ''}</div>
-                    </div>
-                    <div class="prep-row">
-                        <div class="prep-label">核心意义</div>
-                        <div class="prep-value">${meaning}</div>
-                    </div>`;
-
-            if (secondaryMeaning) {
-                html += `<div class="prep-row">
-                        <div class="prep-label">引申意义</div>
-                        <div class="prep-value">${secondaryMeaning}</div>
-                    </div>`;
-            }
-
-            if (thinking) {
-                html += `<div class="prep-row">
-                        <div class="prep-label">思维模型</div>
-                        <div class="prep-value">${thinking}</div>
-                    </div>`;
-            }
-
-            if (collocation) {
-                html += `<div class="prep-row">
-                        <div class="prep-label">常见搭配</div>
-                        <div class="prep-value">${collocation}</div>
-                    </div>`;
-            }
-
-            if (examples.length > 0) {
-                html += `<div class="prep-row">
-                    <div class="prep-label">例句</div>
-                    <div class="prep-value">`;
-                examples.forEach(ex => {
-                    html += `<div class="example">
-                            <div class="example-level">[${ex.level}]</div>
-                            ${ex.text}
-                        </div>`;
+                    return {
+                        title: `${MODULE_ICONS[mod] || '📌'} ${mod}`,
+                        key: mod,
+                        selectable: true,
+                        children: sortedTopics.map(([topic, count]) => ({
+                            title: `${topic} (${count})`,
+                            key: `${mod}::${topic}`,
+                            isLeaf: true,
+                        })),
+                    };
                 });
-                html += `</div></div>`;
-            }
+            }, [allData]);
 
-            if (tips) {
-                html += `<div class="prep-row">
-                        <div class="prep-label">记忆提示</div>
-                        <div class="prep-value">💡 ${tips}</div>
-                    </div>`;
-            }
+            // All CEFR levels
+            const cefrLevels = useMemo(() => {
+                const set = new Set();
+                allData.forEach(p => {
+                    if (p['CEFR']) p['CEFR'].split('-').forEach(l => set.add(l.trim()));
+                });
+                return Array.from(set).sort();
+            }, [allData]);
 
-            if (commonErrors) {
-                html += `<div class="prep-row">
-                        <div class="prep-label">常见错误</div>
-                        <div class="prep-value">❌ ${commonErrors}</div>
-                    </div>`;
-            }
-
-            if (confused) {
-                html += `<div class="prep-row">
-                        <div class="prep-label">易混</div>
-                        <div class="prep-value">⚡ ${confused}</div>
-                    </div>`;
-            }
-
-            if (tags) {
-                const tagList = tags.split(',').map(t => t.trim()).filter(t => t);
-                if (tagList.length > 0) {
-                    html += `<div class="tags-inline">
-                            ${tagList.map(tag => `<span class="tag-inline">${tag}</span>`).join('')}
-                        </div>`;
+            // Compute filtered data
+            const filteredData = useMemo(() => {
+                if (selectedKeys.length === 0) {
+                    // Nothing selected => show nothing
+                    return [];
                 }
+
+                const selectedKey = selectedKeys[0];
+
+                // Determine selected topics
+                let selectedTopics = new Set();
+                if (selectedKey.includes('::')) {
+                    // A specific topic
+                    selectedTopics.add(selectedKey);
+                } else {
+                    // A module — select all its topics
+                    const mod = selectedKey;
+                    treeData.find(n => n.key === mod)?.children?.forEach(ch => {
+                        selectedTopics.add(ch.key);
+                    });
+                }
+
+                return allData.filter(prep => {
+                    const mod = prep['模块'] || '其他';
+                    const topic = prep['主题'] || '其他';
+                    const topicKey = `${mod}::${topic}`;
+
+                    if (!selectedTopics.has(topicKey)) return false;
+
+                    if (searchText) {
+                        const s = searchText.toLowerCase();
+                        const match =
+                            (prep['介词/结构'] || '').toLowerCase().includes(s) ||
+                            (prep['核心意义'] || '').toLowerCase().includes(s) ||
+                            (prep['A1-A2例句'] || '').toLowerCase().includes(s) ||
+                            (prep['B1-B2例句'] || '').toLowerCase().includes(s) ||
+                            (prep['C1例句'] || '').toLowerCase().includes(s);
+                        if (!match) return false;
+                    }
+
+                    if (cefrFilter && !(prep['CEFR'] || '').includes(cefrFilter)) return false;
+
+                    return true;
+                });
+            }, [allData, selectedKeys, searchText, cefrFilter, treeData]);
+
+            // Group filtered data by module
+            const groupedData = useMemo(() => {
+                const groups = {};
+                filteredData.forEach(prep => {
+                    const mod = prep['模块'] || '其他';
+                    if (!groups[mod]) groups[mod] = [];
+                    groups[mod].push(prep);
+                });
+                return groups;
+            }, [filteredData]);
+
+            // Stats
+            const caseTypes = useMemo(() => new Set(filteredData.map(p => p['支配格']).filter(Boolean)), [filteredData]);
+            const moduleTypes = useMemo(() => new Set(filteredData.map(p => p['模块']).filter(Boolean)), [filteredData]);
+
+            const handleTreeSelect = useCallback((keys) => {
+                if (keys.length === 0) return;
+                // Ensure we always have exactly one key selected
+                setSelectedKeys([keys[0]]);
+            }, []);
+
+            const handleReset = useCallback(() => {
+                const sortedMods = getSortedModules(allData);
+                if (sortedMods.length > 0) {
+                    setSelectedKeys([sortedMods[0]]);
+                }
+                setSearchText('');
+                setCefrFilter(undefined);
+            }, [allData]);
+
+            // Sidebar content
+            const sidebarContent = (
+                <div className="sider-tree-wrapper">
+                    <Tree
+                        treeData={treeData}
+                        selectedKeys={selectedKeys}
+                        expandedKeys={expandedKeys}
+                        onExpand={setExpandedKeys}
+                        onSelect={handleTreeSelect}
+                        defaultExpandAll={false}
+                        showIcon={false}
+                        blockNode
+                    />
+                </div>
+            );
+
+            if (loading) {
+                return (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                        <Spin size="large" tip="加载介词数据中..." />
+                    </div>
+                );
             }
 
-            html += `</div>`;
-            card.innerHTML = html;
-            return card;
+            return (
+                <div className="app-container">
+                    {/* Top Nav */}
+                    <div className="top-nav">
+                        <a href="index.html">首页</a>
+                        <a href="about.html">About</a>
+                        <a href="DeutschLernen.html">Deutsch lernen</a>
+                        <a href="online-practice.html">在线练习</a>
+                    </div>
+
+                    <Layout style={{ background: 'transparent', gap: 24 }}>
+                        {/* Sidebar */}
+                        {isMobile ? (
+                            <>
+                                <Button
+                                    type="primary"
+                                    block
+                                    style={{ marginBottom: 8 }}
+                                    onClick={() => setMobileSidebarOpen(true)}
+                                >
+                                    筛选条件
+                                </Button>
+                                {mobileSidebarOpen && (
+                                    <div
+                                        style={{
+                                            position: 'fixed', inset: 0, zIndex: 1000,
+                                            background: 'rgba(0,0,0,0.45)'
+                                        }}
+                                        onClick={() => setMobileSidebarOpen(false)}
+                                    >
+                                        <div
+                                            style={{
+                                                position: 'absolute', left: 0, top: 0, bottom: 0,
+                                                width: 280, background: '#fff',
+                                                padding: '16px 8px', overflowY: 'auto'
+                                            }}
+                                            onClick={e => e.stopPropagation()}
+                                        >
+                                            <div className="sider-header">
+                                                模块 · 主题
+                                                <a onClick={() => { handleReset(); setMobileSidebarOpen(false); }} style={{ fontSize: 13, cursor: 'pointer' }}>重置</a>
+                                            </div>
+                                            <div style={{ padding: '4px 12px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
+                                                已选 <Text strong>{selectedKeys.length ? selectedKeys[0].includes('::') ? 1 : treeData.find(n => n.key === selectedKeys[0])?.children?.length || 0 : 0}</Text> 项
+                                            </div>
+                                            {sidebarContent}
+                                        </div>
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            <Sider
+                                width={300}
+                                style={{ background: '#fff', borderRadius: 8, padding: '0 0 16px' }}
+                                collapsible
+                                collapsed={siderCollapsed}
+                                onCollapse={setSiderCollapsed}
+                                collapsedWidth={0}
+                                trigger={null}
+                            >
+                                <div className="sider-header">
+                                    模块 · 主题
+                                    <a onClick={handleReset} style={{ fontSize: 13, cursor: 'pointer' }}>重置</a>
+                                </div>
+                                <div style={{ padding: '4px 16px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
+                                    已选 <Text strong>{selectedKeys.length ? selectedKeys[0].includes('::') ? 1 : treeData.find(n => n.key === selectedKeys[0])?.children?.length || 0 : 0}</Text> 项
+                                </div>
+                                {sidebarContent}
+                            </Sider>
+                        )}
+
+                        {/* Main Content */}
+                        <Content style={{ minWidth: 0 }}>
+                            <div className="content-area">
+                                <Breadcrumb style={{ marginBottom: 12 }}>
+                                    <Breadcrumb.Item>
+                                        <a href="Grammatik.html">Grammatik</a>
+                                    </Breadcrumb.Item>
+                                    <Breadcrumb.Item>介词登记</Breadcrumb.Item>
+                                </Breadcrumb>
+
+                                <Title level={2} style={{ marginTop: 4 }}>介词登记</Title>
+                                <Paragraph type="secondary">
+                                    这是一份系统整理的德语介词知识库，涵盖 A1 到 C1 级别。左侧可按模块和主题进行树级筛选，右侧展示匹配结果。
+                                </Paragraph>
+
+                                {/* Controls */}
+                                <Space style={{ marginBottom: 16, width: '100%' }} size="middle">
+                                    <Input.Search
+                                        placeholder="搜索介词、意义或例句..."
+                                        allowClear
+                                        value={searchText}
+                                        onChange={e => setSearchText(e.target.value)}
+                                        style={{ width: isMobile ? '100%' : 320 }}
+                                    />
+                                    <Select
+                                        placeholder="CEFR 级别"
+                                        allowClear
+                                        value={cefrFilter}
+                                        onChange={setCefrFilter}
+                                        style={{ width: 140 }}
+                                    >
+                                        {cefrLevels.map(l => (
+                                            <Option key={l} value={l}>{l}</Option>
+                                        ))}
+                                    </Select>
+                                </Space>
+
+                                {/* Active filter chips */}
+                                {selectedKeys.length > 0 && (
+                                    <div style={{ marginBottom: 16 }}>
+                                        <Space wrap>
+                                            {selectedKeys.map(key => {
+                                                if (key.includes('::')) {
+                                                    const [mod, topic] = key.split('::');
+                                                    return (
+                                                        <Tag key={key} closable onClose={() => {
+                                                            const sortedMods = getSortedModules(allData);
+                                                            setSelectedKeys(sortedMods.length > 0 ? [sortedMods[0]] : []);
+                                                        }}>
+                                                            {mod} › {topic}
+                                                        </Tag>
+                                                    );
+                                                }
+                                                return (
+                                                    <Tag key={key} color="blue">
+                                                        {key}（全部主题）
+                                                    </Tag>
+                                                );
+                                            })}
+                                        </Space>
+                                    </div>
+                                )}
+
+                                {/* Stats */}
+                                <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+                                    <Col xs={12} sm={6}>
+                                        <Card size="small">
+                                            <Statistic title="介词总数" value={allData.length} />
+                                        </Card>
+                                    </Col>
+                                    <Col xs={12} sm={6}>
+                                        <Card size="small">
+                                            <Statistic title="筛选结果" value={filteredData.length} valueStyle={{ color: '#1890ff' }} />
+                                        </Card>
+                                    </Col>
+                                    <Col xs={12} sm={6}>
+                                        <Card size="small">
+                                            <Statistic title="支配格类型" value={caseTypes.size} />
+                                        </Card>
+                                    </Col>
+                                    <Col xs={12} sm={6}>
+                                        <Card size="small">
+                                            <Statistic title="分类模块" value={moduleTypes.size} />
+                                        </Card>
+                                    </Col>
+                                </Row>
+
+                                {/* Results */}
+                                {filteredData.length === 0 ? (
+                                    <Empty description="没有找到匹配的介词，请尝试其他筛选条件。" />
+                                ) : (
+                                    Object.entries(groupedData).map(([modName, preps]) => (
+                                        <div key={modName} style={{ marginBottom: 32 }}>
+                                            <Title level={4} style={{ color: '#1890ff', marginBottom: 16 }}>
+                                                {modName} ({preps.length})
+                                            </Title>
+                                            <Row gutter={[16, 16]}>
+                                                {preps.map(prep => {
+                                                    const cefrLevel = prep['CEFR'] || '';
+                                                    const cefr = cefrLevel.split('-')[0];
+                                                    let cefrColor = 'green';
+                                                    if (cefr === 'B1' || cefr === 'B2') cefrColor = 'orange';
+                                                    else if (cefr === 'C1') cefrColor = 'red';
+
+                                                    const examples = [
+                                                        { level: 'A1-A2', text: prep['A1-A2例句'] },
+                                                        { level: 'B1-B2', text: prep['B1-B2例句'] },
+                                                        { level: 'C1', text: prep['C1例句'] }
+                                                    ].filter(e => e.text);
+
+                                                    return (
+                                                        <Col xs={24} sm={24} md={24} lg={24} xl={24} key={prep['ID']}>
+                                                            <Card size="small" hoverable>
+                                                                <div className="prep-card-header">
+                                                                    <span className="prep-card-name">{prep['介词/结构'] || '?'}</span>
+                                                                    <div className="prep-card-meta">
+                                                                        <Tag color="blue">{prep['支配格']}</Tag>
+                                                                        <Tag color={cefrColor}>{cefrLevel}</Tag>
+                                                                        {prep['是否双向介词'] === '是' && <Tag color="geekblue">双向</Tag>}
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="prep-field">
+                                                                    <span className="prep-field-label">模块 · 主题</span>
+                                                                    <span className="prep-field-value">{prep['模块']} · {prep['主题']}</span>
+                                                                </div>
+                                                                <div className="prep-field">
+                                                                    <span className="prep-field-label">核心意义</span>
+                                                                    <span className="prep-field-value">{prep['核心意义']}</span>
+                                                                </div>
+                                                                {prep['引申意义'] && (
+                                                                    <div className="prep-field">
+                                                                        <span className="prep-field-label">引申意义</span>
+                                                                        <span className="prep-field-value">{prep['引申意义']}</span>
+                                                                    </div>
+                                                                )}
+                                                                {prep['思维模型'] && (
+                                                                    <div className="prep-field">
+                                                                        <span className="prep-field-label">思维模型</span>
+                                                                        <span className="prep-field-value">{prep['思维模型']}</span>
+                                                                    </div>
+                                                                )}
+                                                                {prep['常见搭配'] && (
+                                                                    <div className="prep-field">
+                                                                        <span className="prep-field-label">常见搭配</span>
+                                                                        <span className="prep-field-value">{prep['常见搭配']}</span>
+                                                                    </div>
+                                                                )}
+                                                                {examples.length > 0 && (
+                                                                    <div className="prep-field">
+                                                                        <span className="prep-field-label">例句</span>
+                                                                        <div style={{ flex: 1 }}>
+                                                                            {examples.map((ex, i) => (
+                                                                                <div key={i} className="example-block">
+                                                                                    <div className="example-level">[{ex.level}]</div>
+                                                                                    {ex.text}
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                                {prep['记忆提示'] && (
+                                                                    <div className="prep-field">
+                                                                        <span className="prep-field-label">记忆提示</span>
+                                                                        <span className="prep-field-value">💡 {prep['记忆提示']}</span>
+                                                                    </div>
+                                                                )}
+                                                                {prep['常见错误'] && (
+                                                                    <div className="prep-field">
+                                                                        <span className="prep-field-label">常见错误</span>
+                                                                        <span className="prep-field-value">❌ {prep['常见错误']}</span>
+                                                                    </div>
+                                                                )}
+                                                                {prep['易混介词/结构'] && (
+                                                                    <div className="prep-field">
+                                                                        <span className="prep-field-label">易混</span>
+                                                                        <span className="prep-field-value">⚡ {prep['易混介词/结构']}</span>
+                                                                    </div>
+                                                                )}
+                                                                {prep['标签'] && (
+                                                                    <div style={{ marginTop: 8 }}>
+                                                                        <Space wrap>
+                                                                            {prep['标签'].split(',').map((t, i) => (
+                                                                                <Tag key={i} color="purple" style={{ margin: 0 }}>{t.trim()}</Tag>
+                                                                            ))}
+                                                                        </Space>
+                                                                    </div>
+                                                                )}
+                                                            </Card>
+                                                        </Col>
+                                                    );
+                                                })}
+                                            </Row>
+                                        </div>
+                                    ))
+                                )}
+
+                                {/* Footer */}
+                                <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid #f0f0f0', textAlign: 'center', color: 'rgba(0,0,0,0.45)', fontSize: 13 }}>
+                                    <p>💡 提示：左侧树形结构支持按模块和主题双级筛选，单选模式切换模块或主题即可精确过滤。</p>
+                                    <p>数据来源：德语介词 C1 知识库</p>
+                                </div>
+                            </div>
+                        </Content>
+                    </Layout>
+                </div>
+            );
         }
 
-        // ===== Filtering =====
-        function filterPrepositions() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const cefrFilter = document.getElementById('cefrFilter').value;
-
-            const filtered = allPrepositions.filter(prep => {
-                const matchSearch = !searchTerm ||
-                    prep['介词/结构'].toLowerCase().includes(searchTerm) ||
-                    prep['核心意义'].toLowerCase().includes(searchTerm) ||
-                    (prep['A1-A2例句'] || '').toLowerCase().includes(searchTerm) ||
-                    (prep['B1-B2例句'] || '').toLowerCase().includes(searchTerm) ||
-                    (prep['C1例句'] || '').toLowerCase().includes(searchTerm);
-
-                const mod = prep['模块'] || '其他';
-                const topic = prep['主题'] || '其他';
-                const matchTopic = selectedTopics[`${mod}::${topic}`] === true;
-
-                const matchCefr = !cefrFilter || prep['CEFR'].includes(cefrFilter);
-
-                return matchSearch && matchTopic && matchCefr;
+        function getSortedModules(data) {
+            const modSet = new Set(data.map(p => p['模块'] || '其他'));
+            return Array.from(modSet).sort((a, b) => {
+                const ia = MODULE_ORDER.indexOf(a);
+                const ib = MODULE_ORDER.indexOf(b);
+                if (ia !== -1 && ib !== -1) return ia - ib;
+                if (ia !== -1) return -1;
+                if (ib !== -1) return 1;
+                return a.localeCompare(b);
             });
-
-            document.getElementById('filteredCount').textContent = filtered.length;
-            displayPrepositions(filtered);
         }
 
-        function updateStats(preps) {
-            const cases = new Set(preps.map(p => p['支配格']).filter(c => c));
-            const modules = new Set(preps.map(p => p['模块']).filter(m => m));
-
-            document.getElementById('totalCount').textContent = allPrepositions.length;
-            document.getElementById('caseCount').textContent = cases.size;
-            document.getElementById('moduleCount').textContent = modules.size;
-            document.getElementById('filteredCount').textContent = preps.length;
-        }
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('collapsed-mobile');
-        }
-
-        // ===== Event Listeners =====
-        document.getElementById('searchInput').addEventListener('input', filterPrepositions);
-        document.getElementById('cefrFilter').addEventListener('change', () => {
-            filterPrepositions();
-            updateActiveFilterChips();
-        });
-
-        // Load data on page load
-        updateActiveFilterChips();
-        loadData();
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
