@@ -91,6 +91,98 @@
             min-height: 100vh;
         }
 
+        .content-area .ant-tabs-nav {
+            margin-bottom: 0;
+        }
+
+        .content-area .ant-tabs-tab {
+            padding: 10px 16px !important;
+            font-size: 14px;
+            font-family: 'SF Mono', 'Courier New', monospace;
+            font-weight: 500;
+        }
+
+        .content-area .ant-tabs-tab-active {
+            background: #e6f7ff;
+        }
+
+        .content-area .ant-tabs-tab-btn {
+            color: rgba(0, 0, 0, 0.75);
+        }
+
+        .content-area .ant-tabs-tab-active .ant-tabs-tab-btn {
+            color: #1890ff !important;
+        }
+
+        .content-area .ant-tabs-content-holder {
+            padding: 0 0 0 8px;
+        }
+
+        /* Tab pane content card */
+        .tab-detail-card {
+            border: 1px solid #f0f0f0;
+            border-radius: 8px;
+            padding: 20px 24px;
+            background: #fafafa;
+        }
+
+        .tab-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .tab-detail-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1890ff;
+            font-family: 'SF Mono', 'Courier New', monospace;
+        }
+
+        .tab-detail-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Mobile tabs */
+        @media (max-width: 768px) {
+            .content-area .ant-tabs {
+                flex-direction: column !important;
+            }
+
+            .content-area .ant-tabs-nav {
+                margin-bottom: 12px !important;
+            }
+
+            .content-area .ant-tabs-nav-list {
+                flex-direction: row !important;
+                flex-wrap: wrap;
+            }
+
+            .content-area .ant-tabs-tab {
+                padding: 6px 12px !important;
+                font-size: 13px;
+            }
+
+            .content-area .ant-tabs-content-holder {
+                padding: 0;
+            }
+
+            .tab-detail-card {
+                padding: 12px 16px;
+            }
+
+            .tab-detail-name {
+                font-size: 22px;
+            }
+        }
+
         .content-area .ant-card {
             border-radius: 8px;
             transition: box-shadow 0.3s;
@@ -212,8 +304,9 @@
         const { useState, useEffect, useMemo, useCallback, useRef } = React;
         const {
             Layout, Tree, Card, Input, Select, Statistic, Tag, Badge, Space,
-            Typography, Row, Col, Breadcrumb, Button, Collapse, Empty, Spin
+            Typography, Row, Col, Breadcrumb, Button, Collapse, Empty, Spin, Tabs
         } = antd;
+        const { TabPane } = Tabs;
         const { Sider, Content } = Layout;
         const { Text, Title, Paragraph } = Typography;
         const { Option } = Select;
@@ -270,13 +363,13 @@
                     });
             }, []);
 
-            // Build tree data: 一级=模块，二级=具体介词
+            // Build tree data: 仅一级模块节点（具体介词通过右侧 Tab 选择）
             const treeData = useMemo(() => {
                 const modMap = {};
                 allData.forEach(prep => {
                     const mod = prep['模块'] || '其他';
-                    if (!modMap[mod]) modMap[mod] = [];
-                    modMap[mod].push(prep);
+                    if (!modMap[mod]) modMap[mod] = 0;
+                    modMap[mod]++;
                 });
 
                 const sortedMods = Object.keys(modMap).sort((a, b) => {
@@ -288,24 +381,12 @@
                     return a.localeCompare(b);
                 });
 
-                return sortedMods.map(mod => {
-                    const preps = modMap[mod];
-                    // 按介词名称排序
-                    const sortedPreps = [...preps].sort((a, b) =>
-                        (a['介词/结构'] || '').localeCompare(b['介词/结构'] || '')
-                    );
-
-                    return {
-                        title: `${MODULE_ICONS[mod] || '📌'} ${mod} (${sortedPreps.length})`,
-                        key: mod,
-                        selectable: true,
-                        children: sortedPreps.map(prep => ({
-                            title: prep['介词/结构'] || '?',
-                            key: `prep::${prep['ID']}`,
-                            isLeaf: true,
-                        })),
-                    };
-                });
+                return sortedMods.map(mod => ({
+                    title: `${MODULE_ICONS[mod] || '📌'} ${mod} (${modMap[mod]})`,
+                    key: mod,
+                    selectable: true,
+                    isLeaf: true,
+                }));
             }, [allData]);
 
             // All CEFR levels
@@ -326,16 +407,8 @@
                 const selectedKey = selectedKeys[0];
 
                 return allData.filter(prep => {
-                    // 判断是选中了模块还是具体介词
-                    if (selectedKey.startsWith('prep::')) {
-                        // 选中具体介词
-                        const prepId = selectedKey.replace('prep::', '');
-                        if (prep['ID'] !== prepId) return false;
-                    } else {
-                        // 选中模块
-                        const mod = prep['模块'] || '其他';
-                        if (mod !== selectedKey) return false;
-                    }
+                    const mod = prep['模块'] || '其他';
+                    if (mod !== selectedKey) return false;
 
                     if (searchText) {
                         const s = searchText.toLowerCase();
@@ -453,9 +526,9 @@
                                                 模块 · 主题
                                                 <a onClick={() => { handleReset(); setMobileSidebarOpen(false); }} style={{ fontSize: 13, cursor: 'pointer' }}>重置</a>
                                             </div>
-                                            <div style={{ padding: '4px 12px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
-                                                已选 <Text strong>{selectedKeys.length ? selectedKeys[0].startsWith('prep::') ? 1 : treeData.find(n => n.key === selectedKeys[0])?.children?.length || 0 : 0}</Text> 项
-                                            </div>
+                                                <div style={{ padding: '4px 12px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
+                                                    已选 <Text strong>{filteredData.length}</Text> 项
+                                                </div>
                                             {sidebarContent}
                                         </div>
                                     </div>
@@ -475,9 +548,9 @@
                                     模块 · 主题
                                     <a onClick={handleReset} style={{ fontSize: 13, cursor: 'pointer' }}>重置</a>
                                 </div>
-                                <div style={{ padding: '4px 16px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
-                                    已选 <Text strong>{selectedKeys.length ? selectedKeys[0].startsWith('prep::') ? 1 : treeData.find(n => n.key === selectedKeys[0])?.children?.length || 0 : 0}</Text> 项
-                                </div>
+                                                <div style={{ padding: '4px 16px 12px', fontSize: 13, color: 'rgba(0,0,0,0.45)' }}>
+                                                    已选 <Text strong>{filteredData.length}</Text> 项
+                                                </div>
                                 {sidebarContent}
                             </Sider>
                         )}
@@ -523,27 +596,9 @@
                                 {selectedKeys.length > 0 && (
                                     <div style={{ marginBottom: 16 }}>
                                         <Space wrap>
-                                            {selectedKeys.map(key => {
-                                                if (key.startsWith('prep::')) {
-                                                    const prepId = key.replace('prep::', '');
-                                                    const prep = allData.find(p => p['ID'] === prepId);
-                                                    const prepName = prep ? prep['介词/结构'] : key;
-                                                    const modName = prep ? prep['模块'] : '';
-                                                    return (
-                                                        <Tag key={key} closable onClose={() => {
-                                                            const sortedMods = getSortedModules(allData);
-                                                            setSelectedKeys(sortedMods.length > 0 ? [sortedMods[0]] : []);
-                                                        }}>
-                                                            {modName} › {prepName}
-                                                        </Tag>
-                                                    );
-                                                }
-                                                return (
-                                                    <Tag key={key} color="blue">
-                                                        {key}（全部介词）
-                                                    </Tag>
-                                                );
-                                            })}
+                                            <Tag color="blue">
+                                                {selectedKeys[0]}（全部介词 · {filteredData.length} 项）
+                                            </Tag>
                                         </Space>
                                     </div>
                                 )}
@@ -572,28 +627,23 @@
                                     </Col>
                                 </Row>
 
-                                {/* Results */}
+                                {/* Results: 模块标题 > 主题标题 > 介词/搭配（竖Tab） > 详情 */}
                                 {filteredData.length === 0 ? (
                                     <Empty description="没有找到匹配的介词，请尝试其他筛选条件。" />
                                 ) : (
                                     Object.entries(groupedData).map(([modName, topicMap]) => (
                                         <div key={modName} style={{ marginBottom: 32 }}>
-                                            <Title level={4} style={{ color: '#1890ff', marginBottom: 16 }}>
+                                            <Title level={4} style={{ color: '#1890ff', marginBottom: 20, marginTop: 0 }}>
                                                 {modName}
                                             </Title>
-                                            {Object.entries(topicMap).map(([topicName, preps]) => (
-                                                <div key={topicName} style={{ marginBottom: 20 }}>
-                                                    <Title level={5} style={{ color: 'rgba(0,0,0,0.65)', marginBottom: 12, paddingLeft: 8, borderLeft: '3px solid #d9d9d9' }}>
-                                                        {topicName} ({preps.length})
-                                                    </Title>
-                                                    <Row gutter={[16, 16]}>
-                                                        {preps.map(prep => {
+                                            {Object.entries(topicMap).map(([topicName, preps]) => {
+                                                // 渲染详情卡片
+                                                const renderPrepDetail = (prep) => {
                                                     const cefrLevel = prep['CEFR'] || '';
                                                     const cefr = cefrLevel.split('-')[0];
                                                     let cefrColor = 'green';
                                                     if (cefr === 'B1' || cefr === 'B2') cefrColor = 'orange';
                                                     else if (cefr === 'C1') cefrColor = 'red';
-
                                                     const examples = [
                                                         { level: 'A1-A2', text: prep['A1-A2例句'] },
                                                         { level: 'B1-B2', text: prep['B1-B2例句'] },
@@ -601,20 +651,15 @@
                                                     ].filter(e => e.text);
 
                                                     return (
-                                                        <Col xs={24} sm={24} md={24} lg={24} xl={24} key={prep['ID']}>
-                                                            <Card size="small" hoverable>
-                                                                <div className="prep-card-header">
-                                                                    <span className="prep-card-name">{prep['介词/结构'] || '?'}</span>
-                                                                    <div className="prep-card-meta">
+                                                        <div>
+                                                            <div className="tab-detail-card">
+                                                                <div className="tab-detail-header">
+                                                                    <span className="tab-detail-name">{prep['介词/结构'] || '?'}</span>
+                                                                    <div className="tab-detail-meta">
                                                                         <Tag color="blue">{prep['支配格']}</Tag>
                                                                         <Tag color={cefrColor}>{cefrLevel}</Tag>
                                                                         {prep['是否双向介词'] === '是' && <Tag color="geekblue">双向</Tag>}
                                                                     </div>
-                                                                </div>
-
-                                                                <div className="prep-field">
-                                                                    <span className="prep-field-label">模块 · 主题</span>
-                                                                    <span className="prep-field-value">{prep['模块']} · {prep['主题']}</span>
                                                                 </div>
                                                                 <div className="prep-field">
                                                                     <span className="prep-field-label">核心意义</span>
@@ -678,20 +723,54 @@
                                                                         </Space>
                                                                     </div>
                                                                 )}
-                                                            </Card>
-                                                        </Col>
+                                                            </div>
+                                                        </div>
                                                     );
-                                                        })}
-                                                    </Row>
-                                                </div>
-                                            ))}
+                                                };
+
+                                                // 主题标题
+                                                return (
+                                                    <div key={topicName} style={{ marginBottom: 24 }}>
+                                                        <Title level={5} style={{
+                                                            color: 'rgba(0,0,0,0.65)', marginBottom: 12,
+                                                            paddingLeft: 8, borderLeft: '3px solid #d9d9d9'
+                                                        }}>
+                                                            {topicName} ({preps.length})
+                                                        </Title>
+                                                        {/* 只有 1 个介词：直接显示详情，不用 tab */}
+                                                        {preps.length === 1 ? (
+                                                            renderPrepDetail(preps[0])
+                                                        ) : (
+                                                            /* 多个介词/搭配：竖 Tab 切换 */
+                                                            <Tabs
+                                                                tabPosition={isMobile ? 'top' : 'left'}
+                                                                defaultActiveKey={preps[0]['ID']}
+                                                                style={{ minHeight: 200 }}
+                                                            >
+                                                                {preps.map(prep => (
+                                                                    <TabPane
+                                                                        tab={
+                                                                            <span style={{ fontFamily: "'SF Mono', 'Courier New', monospace", fontWeight: 500 }}>
+                                                                                {prep['介词/结构'] || '?'}
+                                                                            </span>
+                                                                        }
+                                                                        key={prep['ID']}
+                                                                    >
+                                                                        {renderPrepDetail(prep)}
+                                                                    </TabPane>
+                                                                ))}
+                                                            </Tabs>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     ))
                                 )}
 
                                 {/* Footer */}
                                 <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid #f0f0f0', textAlign: 'center', color: 'rgba(0,0,0,0.45)', fontSize: 13 }}>
-                                    <p>💡 提示：左侧树形结构一级为模块分类，二级为具体介词，点击即可查看详细信息。原主题分类作为内容标题展示。</p>
+                                    <p>💡 提示：左侧树形结构按模块筛选，右侧按「模块 → 主题标题 → 具体介词/搭配（竖Tab）」三级结构展示。单个介词不显示Tab。</p>
                                     <p>数据来源：德语介词 C1 知识库</p>
                                 </div>
                             </div>
