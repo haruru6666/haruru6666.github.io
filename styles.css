@@ -124,10 +124,130 @@ footer {
     flex-direction: column;
 }
 
+.assistant-panel {
+    margin-top: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.95rem;
+    background: linear-gradient(135deg, #f9f7ff 0%, #f1f6ff 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
+}
+
+.assistant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.assistant-header h3 {
+    margin: 0;
+}
+
+.assistant-messages {
+    min-height: 190px;
+    max-height: 260px;
+    overflow-y: auto;
+    padding: 0.7rem;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(109, 93, 252, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.assistant-message {
+    padding: 0.7rem 0.8rem;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    max-width: 88%;
+    word-break: break-word;
+}
+
+.assistant-message.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #6d5dfc 0%, #5a47e8 100%);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.assistant-message.bot {
+    align-self: flex-start;
+    background: #f3f4f8;
+    color: var(--text);
+    border-bottom-left-radius: 4px;
+}
+
+.assistant-input-row {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.assistant-input {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.7rem 0.9rem;
+    background: white;
+}
+
+.assistant-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(109, 93, 252, 0.12);
+}
+
 .topic-tree,
 .exercise-card {
     position: sticky;
     top: 1rem;
+}
+
+.topic-manager-card {
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    padding: 0.8rem;
+    margin-bottom: 0.9rem;
+    background: #fbfbff;
+}
+
+.topic-manager-tip {
+    margin: 0 0 0.6rem;
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+.import-status {
+    margin-top: 0.6rem;
+    color: var(--accent);
+    font-size: 0.92rem;
+}
+
+.topic-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: 1px solid transparent;
+    background: #f8f8ff;
+    color: var(--text);
+    border-radius: 10px;
+    padding: 0.6rem 0.7rem;
+    margin-bottom: 0.45rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.topic-btn:hover,
+.topic-btn.active {
+    border-color: var(--accent);
+    background: rgba(109, 93, 252, 0.1);
+    color: var(--accent);
 }
 
 .topic-tree h3,

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>介词登记 | Grammatik | haruru666 的德语学习博客</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --bg: #f3f6ff;
+            --surface: rgba(255, 255, 255, 0.9);
+            --text: #1f2937;
+            --muted: #64748b;
+            --accent: #6d5dfc;
+            --border: rgba(109, 93, 252, 0.18);
+            --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: linear-gradient(135deg, #f8f7ff 0%, #eef7ff 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: min(1200px, calc(100% - 2rem));
+            margin: 0 auto;
+            padding: 2rem 0 3rem;
+        }
+
+        .page {
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 2rem;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .top-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            text-decoration: none;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        h1 {
+            margin: 0.3rem 0 0.5rem;
+            font-size: clamp(1.8rem, 2.5vw, 2.5rem);
+        }
+
+        .lead {
+            margin: 0 0 1.5rem;
+            color: var(--muted);
+            font-size: 1.03rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"],
+        select {
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        select {
+            min-width: 150px;
+        }
+
+        .tag-filter {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            background: rgba(109, 93, 252, 0.05);
+        }
+
+        .tag:hover,
+        .tag.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(109, 93, 252, 0.08);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-top: 0.3rem;
+        }
+
+        .prepositions-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .preposition-card {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s;
+        }
+
+        .preposition-card:hover {
+            box-shadow: 0 8px 20px rgba(109, 93, 252, 0.12);
+            border-color: var(--accent);
+        }
+
+        .prep-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .prep-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'Courier New', monospace;
+        }
+
+        .prep-meta {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.7rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-case {
+            background: rgba(109, 93, 252, 0.15);
+            color: var(--accent);
+        }
+
+        .badge-cefr-a {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+
+        .badge-cefr-b {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .badge-cefr-c {
+            background: rgba(244, 63, 94, 0.15);
+            color: #f43f5e;
+        }
+
+        .prep-content {
+            margin-bottom: 1rem;
+        }
+
+        .prep-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+            align-items: start;
+        }
+
+        .prep-label {
+            font-weight: 600;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .prep-value {
+            color: var(--text);
+        }
+
+        .example {
+            margin-top: 0.4rem;
+            padding: 0.5rem 0.8rem;
+            border-left: 3px solid var(--accent);
+            background: rgba(109, 93, 252, 0.06);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .example-level {
+            font-size: 0.8rem;
+            color: var(--muted);
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .tags-inline {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .tag-inline {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            background: rgba(109, 93, 252, 0.1);
+            color: var(--accent);
+            font-size: 0.8rem;
+        }
+
+        .module-section {
+            margin-bottom: 3rem;
+        }
+
+        .module-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .module-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--muted);
+        }
+
+        .no-results-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 700px) {
+            .page {
+                padding: 1.2rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            input[type="text"],
+            select {
+                width: 100%;
+            }
+
+            .prep-header {
+                flex-direction: column;
+            }
+
+            .prep-row {
+                grid-template-columns: 1fr;
+                gap: 0.3rem;
+            }
+
+            .prep-label {
+                font-weight: 600;
+                font-size: 0.85rem;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page">
+            <nav class="top-nav" aria-label="主导航">
+                <a href="index.html">首页</a>
+                <a href="about.html">About</a>
+                <a href="DeutschLernen.html">Deutsch lernen</a>
+                <a href="online-practice.html">在线练习</a>
+            </nav>
+            <a class="top-link" href="Grammatik.html">← 返回 Grammatik</a>
+            <h1>介词登记</h1>
+            <p class="lead">这是一份系统整理的德语介词知识库，涵盖 A1 到 C1 级别。了解介词的支配格、核心意义和用法搭配，让你的表达更加准确流利。</p>
+
+            <div class="controls">
+                <input type="text" id="searchInput" placeholder="搜索介词、意义或例句..." />
+                <select id="moduleFilter">
+                    <option value="">所有模块</option>
+                    <option value="空间介词">空间介词</option>
+                    <option value="Wechselpräpositionen">双向介词</option>
+                    <option value="Dativ介词">Dativ 介词</option>
+                    <option value="Akkusativ介词">Akkusativ 介词</option>
+                    <option value="Genitiv介词">Genitiv 介词</option>
+                    <option value="时间介词">时间介词</option>
+                    <option value="动词+介词">动词+介词</option>
+                    <option value="名词/形容词+介词">名词/形容词+介词</option>
+                    <option value="高级书面表达">高级书面表达</option>
+                </select>
+                <select id="cefrFilter">
+                    <option value="">所有级别</option>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="C1">C1</option>
+                </select>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalCount">93</div>
+                    <div class="stat-label">介词总数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="filteredCount">93</div>
+                    <div class="stat-label">筛选结果</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="caseCount">3</div>
+                    <div class="stat-label">支配格类型</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="moduleCount">9</div>
+                    <div class="stat-label">分类模块</div>
+                </div>
+            </div>
+
+            <div id="prepositionsContainer" class="prepositions-grid"></div>
+
+            <div id="noResults" class="no-results" style="display: none;">
+                <div class="no-results-icon">🔍</div>
+                <p>没有找到匹配的介词。请尝试其他搜索条件。</p>
+            </div>
+
+            <footer>
+                <p>💡 提示：点击卡片可以查看完整信息。常见搭配和例句帮助你更好地理解和应用这些介词。</p>
+                <p>数据来源：德语介词 C1 知识库</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        let allPrepositions = [];
+
+        async function loadData() {
+            try {
+                const response = await fetch('prepositions-data.json');
+                allPrepositions = await response.json();
+                console.log(`Loaded ${allPrepositions.length} prepositions`);
+                displayPrepositions(allPrepositions);
+                updateStats(allPrepositions);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('prepositionsContainer').innerHTML = 
+                    '<p style="color: red;">无法加载数据。请检查 prepositions-data.json 文件。</p>';
+            }
+        }
+
+        function displayPrepositions(preps) {
+            const container = document.getElementById('prepositionsContainer');
+            const noResults = document.getElementById('noResults');
+
+            if (preps.length === 0) {
+                container.style.display = 'none';
+                noResults.style.display = 'block';
+                return;
+            }
+
+            container.style.display = 'grid';
+            noResults.style.display = 'none';
+
+            // Group by module
+            const modules = {};
+            preps.forEach(prep => {
+                const module = prep['模块'] || 'Other';
+                if (!modules[module]) modules[module] = [];
+                modules[module].push(prep);
+            });
+
+            container.innerHTML = '';
+
+            Object.entries(modules).forEach(([moduleName, modulePreps]) => {
+                const moduleDiv = document.createElement('div');
+                moduleDiv.className = 'module-section';
+
+                const moduleTitle = document.createElement('div');
+                moduleTitle.className = 'module-title';
+                moduleTitle.textContent = `${moduleName} (${modulePreps.length})`;
+                moduleDiv.appendChild(moduleTitle);
+
+                const moduleGrid = document.createElement('div');
+                moduleGrid.className = 'module-grid';
+
+                modulePreps.forEach(prep => {
+                    const card = createPrepCard(prep);
+                    moduleGrid.appendChild(card);
+                });
+
+                moduleDiv.appendChild(moduleGrid);
+                container.appendChild(moduleDiv);
+            });
+
+            updateStats(preps);
+        }
+
+        function createPrepCard(prep) {
+            const card = document.createElement('div');
+            card.className = 'preposition-card';
+
+            const cefrLevel = prep['CEFR'] || '';
+            const cefr = cefrLevel.split('-')[0]; // Get first level (e.g., 'A1' from 'A1-B2')
+            let cefrBadge = 'badge-cefr-a';
+            if (cefr === 'B1' || cefr === 'B2') cefrBadge = 'badge-cefr-b';
+            else if (cefr === 'C1') cefrBadge = 'badge-cefr-c';
+
+            const prepName = prep['介词/结构'] || '';
+            const case_ = prep['支配格'] || '';
+            const meaning = prep['核心意义'] || '';
+            const secondaryMeaning = prep['引申意义'] || '';
+            const collocation = prep['常见搭配'] || '';
+            const thinking = prep['思维模型'] || '';
+            const examples = [
+                { level: 'A1-A2', text: prep['A1-A2例句'] },
+                { level: 'B1-B2', text: prep['B1-B2例句'] },
+                { level: 'C1', text: prep['C1例句'] }
+            ].filter(e => e.text);
+
+            const tips = prep['记忆提示'] || '';
+            const commonErrors = prep['常见错误'] || '';
+            const confused = prep['易混介词/结构'] || '';
+            const tags = prep['标签'] || '';
+
+            let html = `
+                <div class="prep-header">
+                    <div class="prep-name">${prepName}</div>
+                    <div class="prep-meta">
+                        <span class="badge badge-case">${case_}</span>
+                        <span class="badge ${cefrBadge}">${cefrLevel}</span>
+            `;
+
+            if (prep['是否双向介词'] === '是') {
+                html += `<span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">双向</span>`;
+            }
+
+            html += `</div></div>
+
+                <div class="prep-content">
+                    <div class="prep-row">
+                        <div class="prep-label">核心意义</div>
+                        <div class="prep-value">${meaning}</div>
+                    </div>
+            `;
+
+            if (secondaryMeaning) {
+                html += `
+                    <div class="prep-row">
+                        <div class="prep-label">引申意义</div>
+                        <div class="prep-value">${secondaryMeaning}</div>
+                    </div>
+                `;
+            }
+
+            if (thinking) {
+                html += `
+                    <div class="prep-row">
+                        <div class="prep-label">思维模型</div>
+                        <div class="prep-value">${thinking}</div>
+                    </div>
+                `;
+            }
+
+            if (collocation) {
+                html += `
+                    <div class="prep-row">
+                        <div class="prep-label">常见搭配</div>
+                        <div class="prep-value">${collocation}</div>
+                    </div>
+                `;
+            }
+
+            // Examples
+            if (examples.length > 0) {
+                html += `<div class="prep-row">
+                    <div class="prep-label">例句</div>
+                    <div class="prep-value">`;
+                examples.forEach(ex => {
+                    html += `
+                        <div class="example">
+                            <div class="example-level">[${ex.level}]</div>
+                            ${ex.text}
+                        </div>
+                    `;
+                });
+                html += `</div></div>`;
+            }
+
+            if (tips) {
+                html += `
+                    <div class="prep-row">
+                        <div class="prep-label">记忆提示</div>
+                        <div class="prep-value">💡 ${tips}</div>
+                    </div>
+                `;
+            }
+
+            if (commonErrors) {
+                html += `
+                    <div class="prep-row">
+                        <div class="prep-label">常见错误</div>
+                        <div class="prep-value">❌ ${commonErrors}</div>
+                    </div>
+                `;
+            }
+
+            if (confused) {
+                html += `
+                    <div class="prep-row">
+                        <div class="prep-label">易混</div>
+                        <div class="prep-value">⚡ ${confused}</div>
+                    </div>
+                `;
+            }
+
+            if (tags) {
+                const tagList = tags.split(',').map(t => t.trim()).filter(t => t);
+                if (tagList.length > 0) {
+                    html += `
+                        <div class="tags-inline">
+                            ${tagList.map(tag => `<span class="tag-inline">${tag}</span>`).join('')}
+                        </div>
+                    `;
+                }
+            }
+
+            html += `</div>`;
+
+            card.innerHTML = html;
+            return card;
+        }
+
+        function filterPrepositions() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const moduleFilter = document.getElementById('moduleFilter').value;
+            const cefrFilter = document.getElementById('cefrFilter').value;
+
+            const filtered = allPrepositions.filter(prep => {
+                const matchSearch = !searchTerm || 
+                    prep['介词/结构'].toLowerCase().includes(searchTerm) ||
+                    prep['核心意义'].toLowerCase().includes(searchTerm) ||
+                    prep['A1-A2例句'].toLowerCase().includes(searchTerm) ||
+                    prep['B1-B2例句'].toLowerCase().includes(searchTerm) ||
+                    prep['C1例句'].toLowerCase().includes(searchTerm);
+
+                const matchModule = !moduleFilter || prep['模块'] === moduleFilter;
+
+                const matchCefr = !cefrFilter || prep['CEFR'].includes(cefrFilter);
+
+                return matchSearch && matchModule && matchCefr;
+            });
+
+            document.getElementById('filteredCount').textContent = filtered.length;
+            displayPrepositions(filtered);
+        }
+
+        function updateStats(preps) {
+            const cases = new Set(preps.map(p => p['支配格']).filter(c => c));
+            const modules = new Set(preps.map(p => p['模块']).filter(m => m));
+
+            document.getElementById('caseCount').textContent = cases.size;
+            document.getElementById('moduleCount').textContent = modules.size;
+            document.getElementById('filteredCount').textContent = preps.length;
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterPrepositions);
+        document.getElementById('moduleFilter').addEventListener('change', filterPrepositions);
+        document.getElementById('cefrFilter').addEventListener('change', filterPrepositions);
+
+        // Load data on page load
+        loadData();
+    </script>
+</body>
+</html>
