@@ -63,7 +63,7 @@ body {
     color: var(--accent);
 }
 
-.ai-hint,
+.knowledge-hint,
 .judge-note {
     margin: 0 0 0.9rem;
     color: var(--accent);

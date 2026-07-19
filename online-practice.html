@@ -20,8 +20,8 @@
             <header class="practice-header">
                 <div>
                     <h1>在线练习</h1>
-                    <p class="lead">这里是一个由 AI 驱动的德语语法学习场景：左侧为 A1–B2 语法知识树，中间为语法讲解，右侧为可交互练习与讲解反馈。</p>
-                    <p class="ai-hint">AI 会根据你的表达是否语法通顺、意思是否成立来灵活判定；只要句子自然、表达合理，就算通过。</p>
+                    <p class="lead">这里是一个由本地知识库驱动的德语语法学习场景：左侧为 A1–B2 语法知识树，中间为知识点讲解，右侧为可交互练习与答案反馈。</p>
+                    <p class="knowledge-hint">题目、标准答案、可接受答案和讲解全部来自内置或你导入的知识库，断网也能练习。</p>
                 </div>
             </header>
 
@@ -43,17 +43,17 @@
                         <span class="lesson-pill" id="topic-pill">sein / haben</span>
                     </div>
                     <h3 id="lesson-title">sein / haben：表达“是”和“有”</h3>
-                    <p id="lesson-summary">AI 生成的语法讲解会根据你选择的主题实时更新，帮助你理解用法、语义和常见误区。</p>
+                    <p id="lesson-summary">知识库讲解会根据你选择的主题实时更新，帮助你理解用法、语义和常见误区。</p>
                     <div id="lesson-content"></div>
 
                     <div class="assistant-panel">
                         <div class="assistant-header">
-                            <h3>AI 助手</h3>
-                            <span>Gemini</span>
+                            <h3>知识库助手</h3>
+                            <span>本地检索</span>
                         </div>
                         <div id="assistant-messages" class="assistant-messages"></div>
                         <div class="assistant-input-row">
-                            <input id="assistant-input" class="assistant-input" type="text" placeholder="问 AI：解释这个语法点，给我例句" />
+                            <input id="assistant-input" class="assistant-input" type="text" placeholder="检索当前知识点、例句或练习说明" />
                             <button class="submit-btn" id="assistant-send-btn">发送</button>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                         <button class="secondary-btn" id="continue-btn">继续练习</button>
                     </div>
                     <p id="practice-status" class="practice-status">当前进度：0/3 连续正确</p>
-                    <p id="judge-note" class="judge-note">当前判定：会优先看语法和表达是否通顺，而不是只看是否和标准答案一字不差。</p>
+                    <p id="judge-note" class="judge-note">当前判定：按标准答案、可接受答案和题库关键词进行本地匹配。</p>
                     <div id="feedback" class="result-box" style="display:none;"></div>
                 </aside>
             </div>
@@ -84,8 +84,8 @@
                     <ul id="mistake-list" class="mistake-list"></ul>
                 </div>
                 <div class="insight-card">
-                    <h3>AI 学习建议</h3>
-                    <p id="ai-advice">开始练习后，系统会根据你最近的正确率和错误情况给出针对性的复盘建议。</p>
+                    <h3>学习建议</h3>
+                    <p id="learning-advice">开始练习后，系统会根据你最近的正确率和错误情况给出针对性的复盘建议。</p>
                 </div>
             </section>
         </div>
@@ -405,7 +405,7 @@
         const difficultyPill = document.getElementById('difficulty-pill');
         const streakPill = document.getElementById('streak-pill');
         const mistakeList = document.getElementById('mistake-list');
-        const aiAdvice = document.getElementById('ai-advice');
+        const learningAdvice = document.getElementById('learning-advice');
         const judgeNote = document.getElementById('judge-note');
 
         let currentTopic = 'sein-haben';
@@ -417,9 +417,8 @@
         let currentDifficulty = 'easy';
         let exerciseIndexByDifficulty = { easy: 0, medium: 0, hard: 0 };
         let mistakeBook = [];
-        let currentExerciseRequestId = 0;
-        const envGeminiApiKey = (window.GEMINI_API_KEY || window.__GEMINI_API_KEY__ || '').trim();
-        let geminiApiKey = envGeminiApiKey || localStorage.getItem('gemini-api-key') || '';
+        const MAX_IMPORT_BYTES = 5 * 1024 * 1024;
+        const MAX_IMPORT_ROWS = 5000;
 
         function appendMessage(role, text) {
             const div = document.createElement('div');
@@ -429,157 +428,98 @@
             assistantMessages.scrollTop = assistantMessages.scrollHeight;
         }
 
-        function extractGeminiText(payload) {
-            if (!payload) return '';
-            if (payload.error?.message) return '';
-            if (typeof payload.text === 'string') return payload.text;
-            const textParts = payload?.candidates?.[0]?.content?.parts || [];
-            return textParts.map((part) => part.text || '').join('').trim();
+        function setFeedback(title, details = []) {
+            feedback.replaceChildren();
+            const heading = document.createElement('strong');
+            heading.textContent = title;
+            feedback.appendChild(heading);
+            details.filter(Boolean).forEach((detail) => {
+                feedback.appendChild(document.createElement('br'));
+                feedback.appendChild(document.createTextNode(detail));
+            });
         }
 
-        function isQuotaErrorMessage(text) {
-            return /quota|rate limit|too many requests|429|free_tier|limit/i.test(text || '');
+        function sanitizeLessonHtml(html) {
+            const template = document.createElement('template');
+            template.innerHTML = String(html || '');
+            const allowedTags = new Set(['P', 'BR', 'STRONG', 'EM', 'B', 'I', 'UL', 'OL', 'LI', 'H2', 'H3', 'H4', 'BLOCKQUOTE', 'CODE']);
+
+            Array.from(template.content.querySelectorAll('*')).forEach((element) => {
+                if (!allowedTags.has(element.tagName)) {
+                    element.replaceWith(document.createTextNode(element.textContent || ''));
+                    return;
+                }
+                Array.from(element.attributes).forEach((attribute) => element.removeAttribute(attribute.name));
+            });
+
+            return template.content;
         }
 
-        async function askGemini(prompt, options = {}) {
-            const { silent = false, loadingText = '正在生成回答...' } = options;
+        function getKnowledgeExercise(topic, difficulty) {
+            const difficultyOrder = [difficulty, 'easy', 'medium', 'hard'];
+            const selectedDifficulty = difficultyOrder.find((level, index) =>
+                difficultyOrder.indexOf(level) === index && exerciseData[topic]?.[level]?.length
+            );
+            if (!selectedDifficulty) return null;
 
-            if (!geminiApiKey) {
-                if (!silent) appendMessage('bot', '当前没有可用密钥。');
-                return '';
+            const pool = exerciseData[topic][selectedDifficulty];
+            const index = exerciseIndexByDifficulty[selectedDifficulty] % pool.length;
+            exerciseIndexByDifficulty[selectedDifficulty] += 1;
+            return pool[index];
+        }
+
+        function getCurrentLesson() {
+            for (const group of Object.values(importedTopics || {})) {
+                if (group[currentTopic]) return group[currentTopic];
+            }
+            return lessonData[currentTopic] || null;
+        }
+
+        function lessonPlainText(lesson) {
+            const template = document.createElement('template');
+            template.innerHTML = String(lesson?.content || '');
+            return template.content.textContent.replace(/\s+/g, ' ').trim();
+        }
+
+        function searchKnowledgeBase(question) {
+            const lesson = getCurrentLesson();
+            if (!lesson) return '当前没有可检索的知识点，请先选择或导入主题。';
+
+            const query = String(question || '').toLowerCase().replace(/[^a-z0-9äöüß\u3400-\u9fff\s]/g, ' ').replace(/\s+/g, ' ').trim();
+            const topic = lesson.topic || lesson.title || currentTopic;
+            const summary = lesson.summary || '';
+            const details = lessonPlainText(lesson);
+            const pool = ['easy', 'medium', 'hard'].flatMap((level) => exerciseData[currentTopic]?.[level] || []);
+
+            if (/例句|例子|beispiel/.test(query)) {
+                const examples = pool.slice(0, 3).map((exercise, index) =>
+                    `${index + 1}. ${exercise.prompt} 答案：${exercise.answer}`
+                );
+                return examples.length
+                    ? `“${topic}”的题库例句：\n${examples.join('\n')}`
+                    : `“${topic}”暂无题库例句，可在导入文件中添加 prompt 和 answer。`;
             }
 
-            try {
-                if (!silent) appendMessage('bot', loadingText);
-                const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + geminiApiKey, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }]
-                    })
-                });
-
-                let data = {};
-                try {
-                    data = await response.json();
-                } catch (error) {
-                    data = {};
-                }
-
-                if (!response.ok) {
-                    const message = data?.error?.message || 'Gemini 请求失败。';
-                    if (isQuotaErrorMessage(message)) {
-                        throw new Error('Gemini 当前配额已满，已切换到本地练习模式。');
-                    }
-                    throw new Error(message);
-                }
-
-                const text = extractGeminiText(data);
-                if (!text) {
-                    throw new Error('Gemini 没有返回内容。');
-                }
-
-                if (!silent) {
-                    if (assistantMessages.lastChild) {
-                        assistantMessages.removeChild(assistantMessages.lastChild);
-                    }
-                    appendMessage('bot', text);
-                }
-                return text;
-            } catch (error) {
-                if (!silent) {
-                    if (assistantMessages.lastChild) {
-                        assistantMessages.removeChild(assistantMessages.lastChild);
-                    }
-                    appendMessage('bot', error.message || '请求失败，请检查网络或密钥是否有效。');
-                }
-                return '';
-            }
-        }
-
-        function normalizeExerciseText(rawText) {
-            return (rawText || '').trim().replace(/```json|```/gi, '').trim();
-        }
-
-        function parseExercisePayload(rawText) {
-            const cleaned = normalizeExerciseText(rawText);
-            const firstBrace = cleaned.indexOf('{');
-            const lastBrace = cleaned.lastIndexOf('}');
-            const jsonCandidate = firstBrace >= 0 && lastBrace > firstBrace ? cleaned.slice(firstBrace, lastBrace + 1) : cleaned;
-
-            try {
-                const parsed = JSON.parse(jsonCandidate);
-                if (!parsed || typeof parsed !== 'object') return null;
-                const type = parsed.type === 'input' ? 'input' : 'choice';
-                const prompt = typeof parsed.prompt === 'string' ? parsed.prompt : '';
-                const answer = typeof parsed.answer === 'string' ? parsed.answer : '';
-                const explanation = typeof parsed.explanation === 'string' ? parsed.explanation : '';
-                if (!prompt || !answer) return null;
-
-                if (type === 'choice') {
-                    const options = Array.isArray(parsed.options) ? parsed.options.filter(Boolean) : [];
-                    if (options.length < 2) return null;
-                    return { type, prompt, options: options.slice(0, 4), answer, explanation };
-                }
-
-                return { type, prompt, answer, explanation };
-            } catch (error) {
-                return null;
-            }
-        }
-
-        function parseFeedbackPayload(rawText) {
-            const cleaned = normalizeExerciseText(rawText);
-            const firstBrace = cleaned.indexOf('{');
-            const lastBrace = cleaned.lastIndexOf('}');
-            const jsonCandidate = firstBrace >= 0 && lastBrace > firstBrace ? cleaned.slice(firstBrace, lastBrace + 1) : cleaned;
-
-            try {
-                const parsed = JSON.parse(jsonCandidate);
-                if (parsed && typeof parsed === 'object') {
-                    return {
-                        correct: typeof parsed.correct === 'boolean' ? parsed.correct : null,
-                        message: typeof parsed.message === 'string' ? parsed.message : ''
-                    };
-                }
-            } catch (error) {
-                // ignore and fall back to simple text parsing
+            if (/练习|题目|题库|exercise/.test(query)) {
+                const counts = ['easy', 'medium', 'hard'].map((level) => exerciseData[currentTopic]?.[level]?.length || 0);
+                return `“${topic}”共有 ${counts.reduce((sum, count) => sum + count, 0)} 道题：基础 ${counts[0]}、进阶 ${counts[1]}、挑战 ${counts[2]}。右侧会按当前难度循环出题。`;
             }
 
-            const lower = cleaned.toLowerCase();
-            if (lower.includes('正确')) return { correct: true, message: cleaned };
-            if (lower.includes('错误') || lower.includes('不对')) return { correct: false, message: cleaned };
-            return { correct: null, message: cleaned };
-        }
+            if (/答案|为什么|warum/.test(query) && currentExercise) {
+                return `当前题的标准答案是“${currentExercise.answer}”。${currentExercise.explanation || '题库暂未提供详细讲解。'}`;
+            }
 
-        function getFallbackExercise(topic, difficulty) {
-            const pool = exerciseData[topic]?.[difficulty] || [];
-            return pool[0] || null;
-        }
+            if (/解释|知识点|介绍|是什么|regel|erklär/.test(query)) {
+                return `“${topic}”：${summary}${details ? `\n${details}` : ''}`;
+            }
 
-        async function generateExerciseFromGemini(topic, difficulty) {
-            const lesson = lessonData[topic];
-            const topicLabel = lesson?.topic || '当前语法主题';
-            const difficultyLabel = difficulty === 'medium' ? '中等' : difficulty === 'hard' ? '较难' : '基础';
-            const prompt = `你是德语语法练习生成器。请围绕“${topicLabel}”主题，生成一条${difficultyLabel}难度的练习题。要求：
-- 只输出一个 JSON 对象
-- 字段必须是：type、prompt、options、answer、explanation
-- 如果 type 是 choice，options 必须是 4 个选项数组；如果 type 是 input，options 设为 []
-- 题干必须是德语语法训练题
-- explanation 用中文解释为什么这样做
-- 请不要包含任何额外说明
-示例格式：{"type":"choice","prompt":"请选择正确的形式：Ich ___ ein Buch.","options":["habe","bin","hat","seid"],"answer":"habe","explanation":"这里需要用 haben，因为表达“我有一本书”。"}`;
+            const searchable = `${topic} ${lesson.title || ''} ${summary} ${details}`.toLowerCase();
+            const terms = query.split(' ').filter((term) => term.length > 1);
+            if (terms.length && !terms.some((term) => searchable.includes(term))) {
+                return `当前知识点“${topic}”中没有找到与“${question}”直接匹配的内容。你可以试试“解释当前知识点”、“给我例句”或“有多少练习”。`;
+            }
 
-            const rawText = await askGemini(prompt, { silent: true });
-            const parsed = parseExercisePayload(rawText);
-            return parsed || getFallbackExercise(topic, difficulty);
-        }
-
-        async function evaluateExerciseWithGemini(userAnswer, exercise) {
-            const prompt = `你是德语语法老师。请判断用户答案是否正确，并给出简短中文讲解。请只输出一个 JSON 对象，字段为 correct 和 message。题目：${exercise.prompt}；正确答案：${exercise.answer}；用户答案：${userAnswer}；解释：${exercise.explanation}`;
-            const rawText = await askGemini(prompt, { silent: true });
-            const parsed = parseFeedbackPayload(rawText);
-            return parsed.correct === null ? { correct: null, message: exercise.explanation } : parsed;
+            return `“${topic}”：${summary}${details ? `\n${details}` : ''}`;
         }
 
         function getDifficultyLabel(level) {
@@ -654,24 +594,33 @@
 
         function renderMistakes() {
             if (!mistakeBook.length) {
-                mistakeList.innerHTML = '<li class="mistake-empty">目前还没有错题，继续练习就会积累这里的内容。</li>';
+                const emptyItem = document.createElement('li');
+                emptyItem.className = 'mistake-empty';
+                emptyItem.textContent = '目前还没有错题，继续练习就会积累这里的内容。';
+                mistakeList.replaceChildren(emptyItem);
                 return;
             }
 
-            mistakeList.innerHTML = '';
+            mistakeList.replaceChildren();
             mistakeBook.forEach((item) => {
                 const li = document.createElement('li');
                 li.className = 'mistake-item';
                 const topicLabel = lessonData[item.topic]?.topic || '当前主题';
-                li.innerHTML = `
-                    <div>
-                        <strong>${topicLabel}</strong>
-                        <p>${item.prompt}</p>
-                        <p class="mistake-answer">正确答案：${item.answer}</p>
-                    </div>
-                    <button class="small-btn" data-topic="${item.topic}">重做</button>
-                `;
-                li.querySelector('.small-btn').addEventListener('click', () => {
+                const content = document.createElement('div');
+                const title = document.createElement('strong');
+                const prompt = document.createElement('p');
+                const answer = document.createElement('p');
+                const retryButton = document.createElement('button');
+                title.textContent = topicLabel;
+                prompt.textContent = item.prompt;
+                answer.className = 'mistake-answer';
+                answer.textContent = `正确答案：${item.answer}`;
+                retryButton.className = 'small-btn';
+                retryButton.type = 'button';
+                retryButton.textContent = '重做';
+                content.append(title, prompt, answer);
+                li.append(content, retryButton);
+                retryButton.addEventListener('click', () => {
                     renderTopic(item.topic);
                 });
                 mistakeList.appendChild(li);
@@ -692,13 +641,13 @@
                 advice += ' 建议先稳扎稳打，先把关键词和基础结构记住，再进入更高难度。';
             }
 
-            aiAdvice.textContent = advice;
+            learningAdvice.textContent = advice;
         }
 
         function renderExercise(exercise) {
             currentExercise = exercise;
             if (!exercise) {
-                exercisePrompt.textContent = 'AI 正在生成题目...';
+                exercisePrompt.textContent = '正在读取知识库题目...';
                 exerciseOptions.innerHTML = '';
                 exerciseInput.style.display = 'none';
                 return;
@@ -728,12 +677,15 @@
             }
         }
 
-        async function loadNextExercise() {
-            const requestId = ++currentExerciseRequestId;
-            renderExercise(null);
-            const exercise = await generateExerciseFromGemini(currentTopic, currentDifficulty);
-            if (requestId !== currentExerciseRequestId) return;
-            renderExercise(exercise || getFallbackExercise(currentTopic, currentDifficulty));
+        function loadNextExercise() {
+            const exercise = getKnowledgeExercise(currentTopic, currentDifficulty);
+            renderExercise(exercise);
+            if (!exercise) {
+                exercisePrompt.textContent = '当前知识点在这个难度下还没有题目，请导入包含 prompt、answer 和 difficulty 的题库。';
+                submitBtn.disabled = true;
+                return;
+            }
+            submitBtn.disabled = false;
         }
 
         function renderTopic(topic) {
@@ -743,7 +695,8 @@
             if (!lesson) return;
             lessonTitle.textContent = lesson.title || lesson.topic || topic;
             lessonSummary.textContent = lesson.summary || '从本地题库导入的内容将显示在这里。';
-            lessonContent.innerHTML = lesson.content || '<p>请导入题库内容。</p>';
+            const lessonMarkup = lesson.content || '<p>请导入题库内容。</p>';
+            lessonContent.replaceChildren(sanitizeLessonHtml(lessonMarkup));
             levelPill.textContent = lesson.level || 'A1';
             topicPill.textContent = lesson.topic || lesson.title || topic;
             currentTopic = topic;
@@ -886,6 +839,9 @@
         function importWorkbookData(rows) {
             const imported = {};
             const normalizedRows = Array.isArray(rows) ? rows : [];
+            if (normalizedRows.length > MAX_IMPORT_ROWS) {
+                throw new Error(`题库最多允许 ${MAX_IMPORT_ROWS} 条记录`);
+            }
             normalizedRows.forEach((row) => {
                 if (!row || typeof row !== 'object') return;
                 const level = row.level || row.Level || row.等级 || 'A1';
@@ -893,14 +849,17 @@
                 const title = row.title || row.Title || topic;
                 const summary = row.summary || row.Summary || '';
                 const content = row.content || row.Content || `<p>${title}</p>`;
-                const id = (row.id || row.Id || topic).toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                const rawId = (row.id || row.Id || topic).toString().trim();
+                const asciiId = rawId.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+                const id = asciiId || encodeURIComponent(rawId).replace(/%/g, '').toLowerCase();
                 if (!imported[level]) imported[level] = {};
                 imported[level][id] = { id, level, topic, title, summary, content };
                 if (!exerciseData[id]) exerciseData[id] = { easy: [], medium: [], hard: [] };
+                const importedOptions = (row.options || row.Options || '').toString().split('|').map((item) => item.trim()).filter(Boolean);
                 const exercise = {
-                    type: row.type === 'input' ? 'input' : 'choice',
+                    type: row.type === 'input' || importedOptions.length < 2 ? 'input' : 'choice',
                     prompt: row.prompt || row.Prompt || `请完成关于 ${topic} 的练习`,
-                    options: (row.options || row.Options || '').toString().split('|').filter(Boolean),
+                    options: importedOptions,
                     answer: row.answer || row.Answer || '',
                     acceptedAnswers: (row.acceptedAnswers || row.AcceptedAnswers || row.answer || '').toString().split('|').filter(Boolean),
                     keywords: (row.keywords || row.Keywords || '').toString().split('|').filter(Boolean),
@@ -934,6 +893,10 @@
 
             const fileName = file.name || '';
             const lowerName = fileName.toLowerCase();
+            if (file.size > MAX_IMPORT_BYTES) {
+                importStatus.textContent = '导入失败：文件不能超过 5 MB';
+                return;
+            }
             importStatus.textContent = `正在读取 ${fileName}...`;
 
             try {
@@ -967,15 +930,14 @@
 
         importBtn.addEventListener('click', handleImport);
 
-        submitBtn.addEventListener('click', async () => {
-            if (!currentExercise) return;
+        submitBtn.addEventListener('click', () => {
+            if (!currentExercise || submitBtn.disabled) return;
             const userAnswer = (exerciseInput.value || '').trim();
             const result = evaluateAnswer(userAnswer, currentExercise);
             feedback.style.display = 'block';
             feedback.className = `result-box ${result.correct ? 'correct' : 'wrong'}`;
 
-            const aiFeedback = await evaluateExerciseWithGemini(userAnswer, currentExercise);
-            const judgedCorrect = aiFeedback.correct ?? result.correct;
+            const judgedCorrect = result.correct;
 
             if (judgedCorrect) {
                 practiceStreak += 1;
@@ -983,7 +945,7 @@
                     currentDifficulty = currentDifficulty === 'easy' ? 'medium' : 'hard';
                     practiceStreak = 0;
                 }
-                feedback.innerHTML = `<strong>回答正确！</strong><br>${aiFeedback.message || currentExercise.explanation}`;
+                setFeedback('回答正确！', [currentExercise.explanation || '已匹配题库中的正确答案。']);
             } else {
                 practiceStreak = 0;
                 currentDifficulty = currentDifficulty === 'hard' ? 'medium' : 'easy';
@@ -993,14 +955,15 @@
                     answer: currentExercise.answer,
                     explanation: currentExercise.explanation
                 });
-                feedback.innerHTML = `<strong>再试一次。</strong><br>${aiFeedback.message || currentExercise.explanation}<br>正确答案：${currentExercise.answer}`;
+                setFeedback('再试一次。', [
+                    currentExercise.explanation || '请对照题库中的标准答案复习这个知识点。',
+                    `正确答案：${currentExercise.answer}`
+                ]);
             }
 
-            judgeNote.textContent = aiFeedback.correct === null && aiFeedback.message
-                ? '当前判定：已切换到本地讲解模式，继续保持练习节奏。'
-                : (judgedCorrect
-                    ? '当前判定：Gemini 认为你的答案是正确的，并给了针对性的讲解。'
-                    : '当前判定：Gemini 结合语法规则给出了解释与纠正建议。');
+            judgeNote.textContent = judgedCorrect
+                ? '当前判定：已匹配标准答案、可接受答案或题库关键词。'
+                : '当前判定：未匹配题库答案，请根据本地讲解复习。';
 
             renderMistakes();
             updateAdvice();
@@ -1025,25 +988,10 @@
             appendMessage('user', question);
             assistantInput.value = '';
 
-            let topicName = '当前语法主题';
-            const builtinLesson = lessonData[currentTopic];
-            const importedLesson = (() => {
-                if (!importedTopics || !Object.keys(importedTopics).length) return null;
-                for (const group of Object.values(importedTopics)) {
-                    if (group[currentTopic]) return group[currentTopic];
-                }
-                return null;
-            })();
-            const lesson = importedLesson || builtinLesson;
-            if (lesson && lesson.topic) {
-                topicName = lesson.topic;
-            }
-
-            const prompt = `你是德语学习助手。请结合当前语法主题"${topicName}"来回答：${question}`;
-            askGemini(prompt);
+            appendMessage('bot', searchKnowledgeBase(question));
         });
 
-        appendMessage('bot', '你好，我是你的德语 AI 助手。你可以直接问我语法、例句、词汇和练习题。');
+        appendMessage('bot', '你好，我是本地知识库助手。你可以输入“解释当前知识点”、“给我例句”、“当前答案为什么”或“有多少练习”。');
 
         renderMistakes();
         updateAdvice();
