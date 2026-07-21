@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DLKB Markdown 文档阅读器">
+    <title>知识库文档 · DLKB</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="markdown-viewer.css">
+</head>
+<body>
+    <div class="container">
+        <div class="page md-page">
+            <nav class="top-nav" aria-label="主导航">
+                <a href="index.html">首页</a>
+                <a href="about.html">About</a>
+                <a class="active" href="DeutschLernen.html">Deutsch lernen</a>
+                <a href="online-practice.html">在线练习</a>
+            </nav>
+
+            <header class="md-header">
+                <div>
+                    <p class="kb-eyebrow">DLKB · Knowledge document</p>
+                    <p class="md-breadcrumb" id="md-breadcrumb">正在读取文档…</p>
+                </div>
+                <div class="md-header-actions">
+                    <a class="md-back" href="DeutschLernen.html">← 返回知识库</a>
+                    <a class="md-source" id="md-source" href="#">查看源文件</a>
+                </div>
+            </header>
+
+            <div class="md-layout">
+                <aside class="md-toc" aria-label="本页目录">
+                    <strong>本页目录</strong>
+                    <nav id="md-toc-list"></nav>
+                </aside>
+                <main class="markdown-body" id="markdown-content" aria-live="polite">
+                    <div class="md-loading">
+                        <span class="md-spinner" aria-hidden="true"></span>
+                        <p>正在渲染 Markdown…</p>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.4/dist/purify.min.js"></script>
+    <script>
+        const content = document.querySelector('#markdown-content');
+        const breadcrumb = document.querySelector('#md-breadcrumb');
+        const sourceLink = document.querySelector('#md-source');
+        const toc = document.querySelector('#md-toc-list');
+        const params = new URLSearchParams(window.location.search);
+        const file = params.get('file') || 'docs/README.md';
+
+        function isAllowedMarkdown(path) {
+            return /^(docs|knowledge-base)\/[A-Za-z0-9_./äöüÄÖÜß-]+\.md$/.test(path) && !path.split('/').includes('..');
+        }
+
+        function normalizePath(baseFile, relativePath) {
+            const parts = `${baseFile.substring(0, baseFile.lastIndexOf('/') + 1)}${relativePath}`.split('/');
+            const normalized = [];
+            parts.forEach((part) => {
+                if (!part || part === '.') return;
+                if (part === '..') normalized.pop();
+                else normalized.push(part);
+            });
+            return normalized.join('/');
+        }
+
+        function slugify(text, used) {
+            const base = text.toLowerCase().trim()
+                .replace(/<[^>]+>/g, '')
+                .replace(/[^\p{L}\p{N}\s-]/gu, '')
+                .replace(/\s+/g, '-') || 'section';
+            let slug = base;
+            let index = 2;
+            while (used.has(slug)) slug = `${base}-${index++}`;
+            used.add(slug);
+            return slug;
+        }
+
+        function enhanceDocument() {
+            const used = new Set();
+            const headings = [...content.querySelectorAll('h1, h2, h3')];
+            headings.forEach((heading) => {
+                heading.id = slugify(heading.textContent, used);
+                const link = document.createElement('a');
+                link.href = `#${heading.id}`;
+                link.textContent = heading.textContent;
+                link.className = `toc-level-${heading.tagName.slice(1)}`;
+                toc.appendChild(link);
+            });
+
+            content.querySelectorAll('a[href]').forEach((link) => {
+                const href = link.getAttribute('href');
+                if (/^(https?:|mailto:)/.test(href)) {
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    return;
+                }
+                if (href.startsWith('#')) return;
+                const [path, hash = ''] = href.split('#');
+                if (path.toLowerCase().endsWith('.md')) {
+                    const target = normalizePath(file, path);
+                    link.href = `markdown-viewer.html?file=${encodeURIComponent(target)}${hash ? `#${hash}` : ''}`;
+                }
+            });
+
+            content.querySelectorAll('img[src]').forEach((image) => {
+                const src = image.getAttribute('src');
+                if (!/^(https?:|data:|\/)/.test(src)) image.src = normalizePath(file, src);
+                image.loading = 'lazy';
+            });
+        }
+
+        async function renderMarkdown() {
+            if (!isAllowedMarkdown(file)) {
+                throw new Error('无效的文档路径。');
+            }
+            if (!window.marked || !window.DOMPurify) {
+                throw new Error('渲染组件加载失败，请检查网络后重试。');
+            }
+
+            breadcrumb.textContent = file.split('/').join('  /  ');
+            sourceLink.href = file;
+            const response = await fetch(file);
+            if (!response.ok) throw new Error(`无法读取文档（${response.status}）。`);
+            const markdown = await response.text();
+            marked.setOptions({ gfm: true, breaks: false });
+            content.innerHTML = DOMPurify.sanitize(marked.parse(markdown));
+            enhanceDocument();
+
+            const title = content.querySelector('h1')?.textContent;
+            if (title) document.title = `${title} · DLKB`;
+        }
+
+        renderMarkdown().catch((error) => {
+            const localHint = window.location.protocol === 'file:'
+                ? '<p>浏览器无法直接读取本地 Markdown。请通过 GitHub Pages 或本地 HTTP 服务打开项目。</p>'
+                : '';
+            content.innerHTML = `<div class="md-error"><h1>文档暂时无法显示</h1><p>${error.message}</p>${localHint}<a href="DeutschLernen.html">返回知识库</a></div>`;
+            breadcrumb.textContent = '读取失败';
+        });
+    </script>
+</body>
+</html>
