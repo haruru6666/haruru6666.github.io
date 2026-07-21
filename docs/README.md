@@ -10,8 +10,15 @@
 
 ## Vocabulary
 
-- [Redemittel](vocabulary/redemittel.md)
-- [Ursachenbank](vocabulary/ursachenbank.md)
+- [Redemittel](vocabulary/redemittel/darueber-hinaus.md)
+  - [Darüber hinaus](vocabulary/redemittel/darueber-hinaus.md)
+- [Ursachenbank](vocabulary/ursachenbank/README.md)
+  - [Lebensstil](vocabulary/ursachenbank/lebensstil.md)
 - [Lösungsbank](vocabulary/loesungsbank.md)
 - [Folgenbank](vocabulary/folgenbank.md)
 - [Kollokationen](vocabulary/kollokationen.md)
+
+## Writing
+
+- [Grafikbeschreibung](writing/grafikbeschreibung/glueck.md)
+  - [Glück](writing/grafikbeschreibung/glueck.md)
