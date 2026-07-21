@@ -3,22 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deutsch lernen | haruru666 的德语学习博客</title>
+    <meta name="description" content="Deutsch lernen：从 B1 到 C1 的个人德语学习知识库与练习中心。">
+    <title>Deutsch lernen · DLKB | haruru666</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .grid {
-            display: grid;
-            gap: 1rem;
-            margin-top: 1.2rem;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        @media (max-width: 700px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -26,36 +13,120 @@
             <nav class="top-nav" aria-label="主导航">
                 <a href="index.html">首页</a>
                 <a href="about.html">About</a>
-                <a class="active" href="DeutschLernen.html">Deutsch lernen</a>
-                <a href="KnowledgeBase.html">知识库</a>
+                <a class="active" href="DeutschLernen.html" aria-current="page">Deutsch lernen</a>
                 <a href="online-practice.html">在线练习</a>
             </nav>
-            <h1>Deutsch lernen</h1>
-            <p class="lead">这是德语学习板块的入口，下面分为词汇、语法和听力三个子栏目，帮助我把学习内容整理得更清晰。</p>
 
-            <div class="grid">
-                <section class="card">
-                    <h3>Grammatik</h3>
-                    <p>记录德语语法点和常见句型。</p>
-                    <p><a href="Grammatik.html">查看页面 →</a></p>
+            <header class="kb-hero">
+                <div class="kb-intro">
+                    <p class="kb-eyebrow">Deutsch Learning Knowledge Base</p>
+                    <h1>Deutsch lernen · DLKB</h1>
+                    <p class="lead">学习、整理与练习的统一入口。把每次学习沉淀成一套可检索、可复习、可持续维护的 B1 → C1 德语教材。</p>
+                    <div class="kb-actions">
+                        <a class="kb-action primary" href="knowledge-base/README.md">浏览维护手册</a>
+                        <a class="kb-action" href="knowledge-base/TEMPLATE.md">使用知识点模板</a>
+                        <a class="kb-action" href="knowledge-base/CHANGELOG.md">查看更新记录</a>
+                    </div>
+                </div>
+                <aside class="kb-status" aria-label="知识库状态">
+                    <h2>学习项目</h2>
+                    <dl>
+                        <div><dt>目标范围</dt><dd>B1 → C1</dd></div>
+                        <div><dt>知识格式</dt><dd>Markdown</dd></div>
+                        <div><dt>练习方式</dt><dd>在线 + 本地</dd></div>
+                        <div><dt>最近更新</dt><dd>2026-07-21</dd></div>
+                    </dl>
+                </aside>
+            </header>
+
+            <main>
+                <div class="kb-toolbar">
+                    <input class="kb-search" id="kb-search" type="search" placeholder="搜索分类或知识点，例如：介词、写作、Redemittel…" aria-label="搜索学习知识库">
+                </div>
+
+                <div class="kb-grid" id="kb-grid">
+                    <section class="kb-card" data-search="grammar grammatik 语法 介词 prepositions 词序 word order 被动 虚拟式">
+                        <div class="kb-card-head"><span class="kb-icon">🧩</span><h2>Grammar · 语法</h2></div>
+                        <p>按功能整理规则、结构、易错点，并连接现有语法课程。</p>
+                        <div class="kb-links">
+                            <a href="Grammatik.html">语法课程</a>
+                            <a href="Präpositionen.html">介词登记</a>
+                            <a href="knowledge-base/grammar/prepositions.md">介词笔记</a>
+                            <a href="knowledge-base/grammar/word-order.md">词序</a>
+                        </div>
+                    </section>
+
+                    <section class="kb-card" data-search="vocabulary vokabeln 词汇 redemittel darüber hinaus ursachenbank 原因库 collocations 搭配">
+                        <div class="kb-card-head"><span class="kb-icon">🗂️</span><h2>Vocabulary · 词汇</h2></div>
+                        <p>维护表达、主题词汇、固定搭配和语域差异。</p>
+                        <div class="kb-links">
+                            <a href="Vokabeln.html">词汇课程</a>
+                            <a href="knowledge-base/vocabulary/redemittel.md">Redemittel</a>
+                            <a href="knowledge-base/vocabulary/ursachenbank.md">原因库</a>
+                            <a href="knowledge-base/vocabulary/collocations.md">固定搭配</a>
+                        </div>
+                    </section>
+
+                    <section class="kb-card" data-search="writing schreiben 写作 图表 grafikbeschreibung argumentation 议论文 erörterung">
+                        <div class="kb-card-head"><span class="kb-icon">✍️</span><h2>Writing · 写作</h2></div>
+                        <p>沉淀图表描述、论证结构和可复用句型。</p>
+                        <div class="kb-links">
+                            <a href="Schreiben.html">写作课程</a>
+                            <a href="knowledge-base/writing/grafikbeschreibung.md">图表描述</a>
+                            <a href="knowledge-base/writing/argumentation.md">论证写作</a>
+                        </div>
+                    </section>
+
+                    <section class="kb-card" data-search="listening hören hörverstehen 听力 练习 方法">
+                        <div class="kb-card-head"><span class="kb-icon">🎧</span><h2>Listening · 听力</h2></div>
+                        <p>连接听力方法、材料和练习复盘。</p>
+                        <div class="kb-links"><a href="Hörverstehen.html">进入听力课程</a></div>
+                    </section>
+
+                    <section class="kb-card" data-search="speaking sprechen 口语 mündlich prüfung 考试 presentation diskussion">
+                        <div class="kb-card-head"><span class="kb-icon">🎙️</span><h2>Speaking · 口语</h2></div>
+                        <p>整理陈述、讨论、回应和口试复盘材料。</p>
+                        <div class="kb-links"><a href="knowledge-base/speaking/README.md">口语索引</a></div>
+                    </section>
+
+                    <section class="kb-card" data-search="practice übung 在线练习 语法 题库 错题本">
+                        <div class="kb-card-head"><span class="kb-icon">⚡</span><h2>Practice · 在线练习</h2></div>
+                        <p>使用知识库内容进行语法练习、答案反馈和错题复盘。</p>
+                        <div class="kb-links"><a href="online-practice.html">开始练习</a></div>
+                    </section>
+                </div>
+                <p class="kb-empty" id="kb-empty">没有匹配的内容，试试更短的关键词。</p>
+
+                <section class="kb-workflow">
+                    <p class="kb-eyebrow">Maintenance workflow</p>
+                    <h2>每次学习后的维护流程</h2>
+                    <div class="kb-steps">
+                        <div class="kb-step"><strong>01 · 学习</strong><span>在课程、练习或聊天中发现知识点。</span></div>
+                        <div class="kb-step"><strong>02 · 归档</strong><span>找到唯一归属文件，避免重复。</span></div>
+                        <div class="kb-step"><strong>03 · 标准化</strong><span>整理定义、用法、易错点、对比和例句。</span></div>
+                        <div class="kb-step"><strong>04 · 提交</strong><span>更新 CHANGELOG，并用 Git 提交。</span></div>
+                    </div>
                 </section>
-                <section class="card">
-                    <h3>Vokabeln</h3>
-                    <p>积累单词、短语和常用表达。</p>
-                    <p><a href="Vokabeln.html">查看页面 →</a></p>
-                </section>
-                <section class="card">
-                    <h3>Hörverstehen</h3>
-                    <p>整理听力练习方法和小练习。</p>
-                    <p><a href="Hörverstehen.html">查看页面 →</a></p>
-                </section>
-                <section class="card">
-                    <h3>Schreiben</h3>
-                    <p>记录写作练习、句型和表达积累。</p>
-                    <p><a href="Schreiben.html">查看页面 →</a></p>
-                </section>
-            </div>
+            </main>
+
+            <footer><p>DLKB · 用项目的方式，认真维护每一次进步。</p></footer>
         </div>
     </div>
+    <script>
+        const search = document.querySelector('#kb-search');
+        const cards = [...document.querySelectorAll('.kb-card')];
+        const empty = document.querySelector('#kb-empty');
+
+        search.addEventListener('input', () => {
+            const query = search.value.trim().toLowerCase();
+            let visible = 0;
+            cards.forEach((card) => {
+                const matches = !query || card.dataset.search.toLowerCase().includes(query) || card.textContent.toLowerCase().includes(query);
+                card.hidden = !matches;
+                if (matches) visible += 1;
+            });
+            empty.style.display = visible ? 'none' : 'block';
+        });
+    </script>
 </body>
 </html>
