@@ -10,13 +10,15 @@
 
 ## Vocabulary
 
-- [Redemittel](vocabulary/redemittel/darueber-hinaus.md)
+- [Wortbildung](vocabulary/wortbildung/README.md) · [交互学习页](../Wortbildung.html)
+  - [Adjektiv → Nomen](vocabulary/wortbildung/adjektiv-nomen.md)
+- [Redemittel](vocabulary/redemittel/README.md)
   - [Darüber hinaus](vocabulary/redemittel/darueber-hinaus.md)
 - [Ursachenbank](vocabulary/ursachenbank/README.md)
   - [Lebensstil](vocabulary/ursachenbank/lebensstil.md)
-- [Lösungsbank](vocabulary/loesungsbank.md)
-- [Folgenbank](vocabulary/folgenbank.md)
-- [Kollokationen](vocabulary/kollokationen.md)
+- [Lösungsbank](vocabulary/loesungsbank/README.md)
+- [Folgenbank](vocabulary/folgenbank/README.md)
+- [Kollokationen](vocabulary/kollokationen/README.md)
 
 ## Writing
 

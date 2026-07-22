@@ -1,0 +1,4 @@
+interface:
+  display_name: "DLKB Maintainer"
+  short_description: "Maintain the German B2–C1 knowledge base consistently"
+  default_prompt: "Use $dlkb-maintainer to add today’s German learning material to the knowledge base."

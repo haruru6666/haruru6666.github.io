@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DLKB 德语构词法交互学习页">
+    <title>Wortbildung · DLKB</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="wortbildung.css">
+</head>
+<body>
+    <div class="container">
+        <div class="page wb-page">
+            <nav class="top-nav" aria-label="主导航">
+                <a href="index.html">首页</a>
+                <a href="about.html">About</a>
+                <a class="active" href="DeutschLernen.html">Deutsch lernen</a>
+                <a href="online-practice.html">在线练习</a>
+            </nav>
+
+            <header class="wb-hero">
+                <div>
+                    <p class="kb-eyebrow">Interactive textbook · Wortbildung</p>
+                    <h1>德语构词法</h1>
+                    <p class="lead">从词性转换、词缀和词族三个角度理解单词之间的关系。筛选一条记录，展开规则、搭配和完整词族。</p>
+                </div>
+                <div class="wb-hero-actions">
+                    <a href="markdown-viewer.html?file=docs/vocabulary/wortbildung/README.md">阅读章节目录</a>
+                    <a href="markdown-viewer.html?file=docs/vocabulary/wortbildung/adjektiv-nomen.md">Adjektiv → Nomen</a>
+                </div>
+            </header>
+
+            <main>
+                <section class="wb-controls" aria-label="构词法筛选器">
+                    <div class="wb-control-row">
+                        <span class="wb-control-label">查看方式</span>
+                        <div class="wb-tabs" id="view-tabs">
+                            <button class="active" type="button" data-view="transformation">词性转换</button>
+                            <button type="button" data-view="affix">词缀</button>
+                            <button type="button" data-view="family">词族</button>
+                        </div>
+                    </div>
+                    <div class="wb-control-row" id="transformation-row">
+                        <span class="wb-control-label">转换方向</span>
+                        <div class="wb-tabs" id="transformation-tabs"></div>
+                    </div>
+                    <div class="wb-control-row" id="affix-row">
+                        <span class="wb-control-label">词缀</span>
+                        <div class="wb-tabs wb-tabs-scroll" id="affix-tabs"></div>
+                    </div>
+                    <div class="wb-control-row">
+                        <span class="wb-control-label">等级</span>
+                        <div class="wb-tabs" id="level-tabs"></div>
+                    </div>
+                    <label class="wb-search">
+                        <span class="wb-control-label">搜索</span>
+                        <input id="wb-search" type="search" placeholder="搜索单词、中文含义、词族或搭配…">
+                    </label>
+                </section>
+
+                <section class="wb-summary" aria-live="polite">
+                    <div><strong id="result-count">0</strong><span>条构词记录</span></div>
+                    <p id="active-description">按词性转换查看构词关系。</p>
+                </section>
+
+                <section class="wb-table-card">
+                    <div class="wb-table-wrap">
+                        <table class="wb-table">
+                            <thead>
+                                <tr>
+                                    <th>来源词</th>
+                                    <th>转换</th>
+                                    <th>词缀</th>
+                                    <th>目标词</th>
+                                    <th>中文含义</th>
+                                    <th>等级</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wb-results"></tbody>
+                        </table>
+                    </div>
+                    <p class="wb-empty" id="wb-empty" hidden>没有符合当前条件的记录。</p>
+                </section>
+            </main>
+
+            <footer><p>DLKB · Markdown 维护内容，JSON 驱动交互，网页负责学习体验。</p></footer>
+        </div>
+    </div>
+    <script src="js/wortbildung.js?v=20260722"></script>
+</body>
+</html>

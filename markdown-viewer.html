@@ -53,6 +53,7 @@
         const toc = document.querySelector('#md-toc-list');
         const params = new URLSearchParams(window.location.search);
         const file = params.get('file') || 'docs/README.md';
+        const githubRawBase = 'https://raw.githubusercontent.com/haruru6666/haruru6666.github.io/main/';
 
         function isAllowedMarkdown(path) {
             return /^(docs|knowledge-base)\/[A-Za-z0-9_./äöüÄÖÜß-]+\.md$/.test(path) && !path.split('/').includes('..');
@@ -124,8 +125,18 @@
             }
 
             breadcrumb.textContent = file.split('/').join('  /  ');
-            sourceLink.href = file;
-            const response = await fetch(file);
+            const rawUrl = `${githubRawBase}${file.split('/').map(encodeURIComponent).join('/')}`;
+            sourceLink.href = window.location.protocol === 'file:' ? rawUrl : file;
+            sourceLink.target = window.location.protocol === 'file:' ? '_blank' : '_self';
+            sourceLink.rel = window.location.protocol === 'file:' ? 'noopener noreferrer' : '';
+
+            let response;
+            try {
+                response = await fetch(window.location.protocol === 'file:' ? rawUrl : file);
+                if (!response.ok && window.location.protocol !== 'file:') response = await fetch(rawUrl);
+            } catch (error) {
+                response = await fetch(rawUrl);
+            }
             if (!response.ok) throw new Error(`无法读取文档（${response.status}）。`);
             const markdown = await response.text();
             marked.setOptions({ gfm: true, breaks: false });
@@ -137,10 +148,7 @@
         }
 
         renderMarkdown().catch((error) => {
-            const localHint = window.location.protocol === 'file:'
-                ? '<p>浏览器无法直接读取本地 Markdown。请通过 GitHub Pages 或本地 HTTP 服务打开项目。</p>'
-                : '';
-            content.innerHTML = `<div class="md-error"><h1>文档暂时无法显示</h1><p>${error.message}</p>${localHint}<a href="DeutschLernen.html">返回知识库</a></div>`;
+            content.innerHTML = `<div class="md-error"><h1>文档暂时无法显示</h1><p>${error.message}</p><p>请检查网络连接，或稍后等待 GitHub Pages 完成部署。</p><a href="DeutschLernen.html">返回知识库</a></div>`;
             breadcrumb.textContent = '读取失败';
         });
     </script>
