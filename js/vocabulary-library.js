@@ -5,7 +5,7 @@ const state = { index: null, category: requestedCategory, query: '' };
 const elements = {
     title: document.querySelector('#category-title'),
     description: document.querySelector('#category-description'),
-    tabs: document.querySelector('#category-tabs'),
+    moduleLabel: document.querySelector('#module-label'),
     search: document.querySelector('#entry-search'),
     count: document.querySelector('#entry-count'),
     grid: document.querySelector('#entry-grid'),
@@ -21,17 +21,6 @@ function makeElement(tag, value, className) {
 
 function currentCategory() {
     return state.index.categories.find(category => category.id === state.category) || state.index.categories[0];
-}
-
-function renderTabs() {
-    elements.tabs.replaceChildren();
-    state.index.categories.forEach(category => {
-        const link = makeElement('a', `${category.name} · ${category.nameZh}`);
-        link.href = `VocabularyLibrary.html?category=${encodeURIComponent(category.id)}`;
-        link.classList.toggle('active', category.id === state.category);
-        link.setAttribute('aria-current', category.id === state.category ? 'page' : 'false');
-        elements.tabs.append(link);
-    });
 }
 
 function visibleEntries() {
@@ -63,8 +52,8 @@ function render() {
     state.category = category.id;
     elements.title.textContent = `${category.name} · ${category.nameZh}`;
     elements.description.textContent = category.description;
+    elements.moduleLabel.textContent = category.module === 'writing' ? 'Writing material library' : 'Vocabulary knowledge library';
     document.title = `${category.name} · DLKB`;
-    renderTabs();
 
     const entries = visibleEntries();
     elements.grid.replaceChildren(...entries.map(makeCard));

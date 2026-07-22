@@ -12,18 +12,18 @@
 
 - [Wortbildung](vocabulary/wortbildung/README.md) · [交互学习页](../Wortbildung.html)
   - [Adjektiv → Nomen](vocabulary/wortbildung/adjektiv-nomen.md)
-- [Redemittel](vocabulary/redemittel/README.md) · [网页](../VocabularyLibrary.html?category=redemittel)
+- [Redemittel 网页](../VocabularyLibrary.html?category=redemittel)
   - [Darüber hinaus](vocabulary/redemittel/darueber-hinaus.md)
-- [Ursachenbank](vocabulary/ursachenbank/README.md) · [网页](../VocabularyLibrary.html?category=ursachenbank)
-  - [Positive Einstellung zum Leben](vocabulary/ursachenbank/positive-einstellung-zum-leben.md)
-- [Lösungsbank](vocabulary/loesungsbank/README.md) · [网页](../VocabularyLibrary.html?category=loesungsbank)
-- [Folgenbank](vocabulary/folgenbank/README.md) · [网页](../VocabularyLibrary.html?category=folgenbank)
-- [Kollokationen](vocabulary/kollokationen/README.md) · [网页](../VocabularyLibrary.html?category=kollokationen)
+- [Kollokationen 网页](../VocabularyLibrary.html?category=kollokationen)
   - [Eine wichtige Rolle spielen](vocabulary/kollokationen/eine-wichtige-rolle-spielen.md)
   - [Einen Beitrag leisten](vocabulary/kollokationen/einen-beitrag-leisten.md)
 
 ## Writing
 
+- [Ursachenbank 网页](../VocabularyLibrary.html?category=ursachenbank)
+  - [Positive Einstellung zum Leben](writing/ursachenbank/positive-einstellung-zum-leben.md)
+- [Lösungsbank 网页](../VocabularyLibrary.html?category=loesungsbank)
+- [Folgenbank 网页](../VocabularyLibrary.html?category=folgenbank)
 - [Grafikbeschreibung](writing/grafikbeschreibung/glueck.md)
   - [Glück](writing/grafikbeschreibung/glueck.md)
 - [Argumentation](writing/argumentation/README.md)

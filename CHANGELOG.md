@@ -20,3 +20,4 @@
 - 修正知识库主页中迁移后的词汇库链接，并将论证写作迁移到 `docs/`。
 - 词汇分类升级为可搜索的网页索引，并落实“一个词或搭配，一个 Markdown”。
 - 将旧词汇聚合文件迁移为 Redemittel、Ursachenbank 与 Kollokationen 独立知识页。
+- 精简 Vocabulary 卡片入口，并将原因库、解决方案库和结果库归入 Writing 模块。

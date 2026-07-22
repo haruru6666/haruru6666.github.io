@@ -22,18 +22,6 @@
     text-decoration: none;
     white-space: nowrap;
 }
-.vl-categories { display: flex; gap: .5rem; margin: 1rem 0; overflow-x: auto; padding-bottom: .25rem; }
-.vl-categories a {
-    flex: 0 0 auto;
-    padding: .55rem .78rem;
-    border: 1px solid transparent;
-    border-radius: 999px;
-    background: rgba(255,255,255,.82);
-    color: #475569;
-    font-weight: 750;
-    text-decoration: none;
-}
-.vl-categories a:hover, .vl-categories a.active { border-color: var(--accent); background: rgba(109,93,252,.1); color: var(--accent); }
 .vl-search { display: grid; gap: .4rem; color: var(--muted); font-size: .88rem; font-weight: 700; }
 .vl-search input {
     width: 100%;

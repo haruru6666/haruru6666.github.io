@@ -8,7 +8,7 @@ tags:
 - Glück
 - Gesundheit
 - Lebensqualität
-last_updated: 2026-07-22
+last_updated: 2026-07-23
 ---
 
 # Positive Einstellung zum Leben
@@ -47,7 +47,7 @@ last_updated: 2026-07-22
 
 ## Exam Usage
 
-适合用于以下主题：
+适合用于以下写作主题：
 
 - Grafikbeschreibung
 - Glück

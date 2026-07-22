@@ -2,30 +2,35 @@
   "categories": [
     {
       "id": "redemittel",
+      "module": "vocabulary",
       "name": "Redemittel",
       "nameZh": "功能表达",
       "description": "连接论点、组织表达并体现语域的常用表达。"
     },
     {
       "id": "ursachenbank",
+      "module": "writing",
       "name": "Ursachenbank",
       "nameZh": "原因库",
       "description": "为写作和口语积累可复用的原因、背景和解释角度。"
     },
     {
       "id": "loesungsbank",
+      "module": "writing",
       "name": "Lösungsbank",
       "nameZh": "解决方案库",
       "description": "按主题整理措施、建议和问题解决表达。"
     },
     {
       "id": "folgenbank",
+      "module": "writing",
       "name": "Folgenbank",
       "nameZh": "结果库",
       "description": "按主题整理结果、影响和因果链表达。"
     },
     {
       "id": "kollokationen",
+      "module": "vocabulary",
       "name": "Kollokationen",
       "nameZh": "固定搭配",
       "description": "以一个搭配一个知识页的方式积累地道表达。"
@@ -48,7 +53,7 @@
       "meaningZh": "对生活持积极态度",
       "level": "B2",
       "tags": ["Lebensstil", "Glück", "Gesundheit"],
-      "path": "docs/vocabulary/ursachenbank/positive-einstellung-zum-leben.md"
+      "path": "docs/writing/ursachenbank/positive-einstellung-zum-leben.md"
     },
     {
       "id": "eine-wichtige-rolle-spielen",
