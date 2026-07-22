@@ -35,7 +35,7 @@ Ursachen 是 B2/C1 写作中最重要的素材库。
 - Sport
 - Freizeit
 - Work-Life-Balance
-- [positive Einstellung zum Leben](lebensstil.md#positive-einstellung-zum-leben)
+- [positive Einstellung zum Leben](positive-einstellung-zum-leben.md)
 
 ---
 

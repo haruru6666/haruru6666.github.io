@@ -20,6 +20,8 @@ Treat chat as the discussion process and `docs/` as the canonical learning resul
 9. Use Chinese for explanations and German for target forms and examples. Add English glosses only when they improve clarity.
 10. Update the relevant category navigation, `docs/README.md`, and the root `CHANGELOG.md` using the current date.
 11. When the concept appears in an interactive textbook page, update its record under `data/` as well. Keep prose in Markdown and structured filter fields in JSON; do not duplicate long explanations in JSON.
+    - For a concrete vocabulary word, expression, reason, solution, consequence, or collocation, create one Markdown file and register it in `data/vocabulary-index.json`.
+    - Never restore aggregate files such as `redemittel.md` or `collocations.md`; use a category `README.md` plus one file per entry.
 12. When adding a new category or interactive surface, update `DeutschLernen.html`. Reuse the existing page, stylesheet, and script pattern instead of embedding learning data in HTML.
 13. Ensure Markdown links resolve, validate changed JSON and JavaScript, and run `git diff --check` before finishing.
 
@@ -39,4 +41,5 @@ Treat chat as the discussion process and `docs/` as the canonical learning resul
 - `data/`: normalized records used for filtering, search, tables, and relationship views.
 - `*.html`, `css`, and `js`: presentation and interaction only; do not hardcode growing word lists here.
 - `markdown-viewer.html`: render all standalone knowledge pages consistently.
+- `VocabularyLibrary.html`: render searchable vocabulary category pages from `data/vocabulary-index.json`.
 - `DeutschLernen.html`: act as the learning hub, not as a content database.

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DLKB 词汇分类学习页">
+    <title>Vocabulary Library · DLKB</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="vocabulary-library.css">
+</head>
+<body>
+    <div class="container">
+        <div class="page vl-page">
+            <nav class="top-nav" aria-label="主导航">
+                <a href="index.html">首页</a>
+                <a href="about.html">About</a>
+                <a class="active" href="DeutschLernen.html">Deutsch lernen</a>
+                <a href="online-practice.html">在线练习</a>
+            </nav>
+
+            <header class="vl-hero">
+                <div>
+                    <p class="kb-eyebrow">Vocabulary knowledge network</p>
+                    <h1 id="category-title">Vocabulary</h1>
+                    <p class="lead" id="category-description">正在加载词汇分类…</p>
+                </div>
+                <a class="vl-back" href="DeutschLernen.html">← 返回学习主页</a>
+            </header>
+
+            <main>
+                <nav class="vl-categories" id="category-tabs" aria-label="词汇分类"></nav>
+                <label class="vl-search">
+                    <span>搜索词、搭配、中文含义或标签</span>
+                    <input id="entry-search" type="search" placeholder="例如：darüber hinaus、贡献、Writing…">
+                </label>
+
+                <div class="vl-meta">
+                    <p><strong id="entry-count">0</strong> 个独立知识页</p>
+                    <p>每个词或搭配对应一个 Markdown 文件</p>
+                </div>
+
+                <section class="vl-grid" id="entry-grid" aria-live="polite"></section>
+                <section class="vl-empty" id="entry-empty" hidden>
+                    <h2>这个分类还没有具体条目</h2>
+                    <p>以后新增内容时，为每个词或搭配创建独立 Markdown，并登记到词汇索引。</p>
+                </section>
+            </main>
+
+            <footer><p>DLKB · 一个词或搭配，一个知识页，一个明确归宿。</p></footer>
+        </div>
+    </div>
+    <script src="js/vocabulary-library.js?v=20260722"></script>
+</body>
+</html>

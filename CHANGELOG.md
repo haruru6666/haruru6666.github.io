@@ -17,3 +17,6 @@
 - Vocabulary 分类改为目录级索引，落实“一知识点一文件”。
 - 构词法升级为 Markdown 正文、JSON 数据和交互网页三层架构。
 - DLKB Skill 增加正文、数据与页面同步规则。
+- 修正知识库主页中迁移后的词汇库链接，并将论证写作迁移到 `docs/`。
+- 词汇分类升级为可搜索的网页索引，并落实“一个词或搭配，一个 Markdown”。
+- 将旧词汇聚合文件迁移为 Redemittel、Ursachenbank 与 Kollokationen 独立知识页。
