@@ -197,7 +197,7 @@ elements.results.addEventListener('keydown', event => {
 });
 
 async function loadData() {
-    const localPath = 'data/wortbildung.json?v=20260722';
+    const localPath = 'data/wortbildung.json?v=20260723';
     const rawPath = 'https://raw.githubusercontent.com/haruru6666/haruru6666.github.io/main/data/wortbildung.json';
     let response;
     try {

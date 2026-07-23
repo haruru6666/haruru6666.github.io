@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-07-23
+
+### Added
+
+- 形容词词尾总览及 `-bar`、`-lich`、`-ig`、`-isch`、`-los`、`-voll`、`-sam`、`-fähig`、`-wert` 独立知识页。
+- 考试高频构词规律，并补充 `-mäßig`、材料后缀 `-ern` 与 `-en`。
+
+### Updated
+
+- 将 Wortbildung 从 Vocabulary 迁移到 Grammar，并统一所有知识库导航。
+- 校正 `-fähig`、`-sam`、`-bar` 与 `-isch` 的适用范围，明确区分识别规律与自由造词。
+- 构词互动数据与 Markdown 目录同步；Markdown 保留完整讲解，JSON 只维护结构化示例，避免重复正文。
+
 ## 2026-07-22
 
 ### Added

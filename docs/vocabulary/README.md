@@ -1,7 +1,5 @@
 # Vocabulary
 
-- [Wortbildung](wortbildung/README.md) · [交互学习页](../../Wortbildung.html)
-  - [Adjektiv → Nomen](wortbildung/adjektiv-nomen.md)
 - [Redemittel 网页](../../VocabularyLibrary.html?category=redemittel)
   - [Darüber hinaus](redemittel/darueber-hinaus.md)
 - [Kollokationen 网页](../../VocabularyLibrary.html?category=kollokationen)

@@ -6,6 +6,7 @@
   - [介词用法](../Präpositionen.html)
   - [Sich auswirken auf + Akkusativ](grammar/prepositions/sich-auswirken-auf.md)
   - [情感形容词的介词用法与区别](grammar/prepositions/emotionale-adjektive.md)
+  - [Wortbildung](grammar/wortbildung/README.md)
 - [Vocabulary](vocabulary/README.md)
 - [Writing](writing/README.md)
 - [Speaking](speaking/README.md)
@@ -13,8 +14,6 @@
 
 ## Vocabulary
 
-- [Wortbildung](vocabulary/wortbildung/README.md) · [交互学习页](../Wortbildung.html)
-  - [Adjektiv → Nomen](vocabulary/wortbildung/adjektiv-nomen.md)
 - [Redemittel 网页](../VocabularyLibrary.html?category=redemittel)
   - [Darüber hinaus](vocabulary/redemittel/darueber-hinaus.md)
 - [Kollokationen 网页](../VocabularyLibrary.html?category=kollokationen)

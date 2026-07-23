@@ -1,7 +1,7 @@
 ---
 title: Adjektiv → Nomen
 level: B2–C1
-category: Wortbildung
+category: Grammatik / Wortbildung
 tags:
 - B2
 - C1
