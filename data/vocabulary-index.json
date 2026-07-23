@@ -34,6 +34,20 @@
       "name": "Kollokationen",
       "nameZh": "固定搭配",
       "description": "以一个搭配一个知识页的方式积累地道表达。"
+    },
+    {
+      "id": "personenbeschreibung",
+      "module": "vocabulary",
+      "name": "Personenbeschreibung",
+      "nameZh": "人物与性格",
+      "description": "用于描述人物印象、性格、态度和情感能力的高频表达。"
+    },
+    {
+      "id": "gefuehle",
+      "module": "vocabulary",
+      "name": "Gefühle mit Präpositionen",
+      "nameZh": "情感形容词",
+      "description": "按目标、原因、来源和状态理解情感形容词的固定介词搭配。"
     }
   ],
   "entries": [
@@ -72,6 +86,96 @@
       "level": "B2–C1",
       "tags": ["Writing", "Environment", "Argumentation"],
       "path": "docs/vocabulary/kollokationen/einen-beitrag-leisten.md"
+    },
+    {
+      "id": "sympathisch", "category": "personenbeschreibung", "title": "Sympathisch", "meaningZh": "讨人喜欢的", "level": "B1", "tags": ["Charakter", "Eindruck"], "path": "docs/vocabulary/personenbeschreibung/sympathisch.md"
+    },
+    {
+      "id": "attraktiv", "category": "personenbeschreibung", "title": "Attraktiv", "meaningZh": "有吸引力的", "level": "B1", "tags": ["Eindruck", "Aussehen"], "path": "docs/vocabulary/personenbeschreibung/attraktiv.md"
+    },
+    {
+      "id": "intelligent", "category": "personenbeschreibung", "title": "Intelligent", "meaningZh": "聪明的", "level": "B1", "tags": ["Fähigkeit", "Charakter"], "path": "docs/vocabulary/personenbeschreibung/intelligent.md"
+    },
+    {
+      "id": "ehrlich", "category": "personenbeschreibung", "title": "Ehrlich", "meaningZh": "诚实的", "level": "B1", "tags": ["Charakter", "Werte"], "path": "docs/vocabulary/personenbeschreibung/ehrlich.md"
+    },
+    {
+      "id": "transparent", "category": "personenbeschreibung", "title": "Transparent", "meaningZh": "公开清楚的", "level": "B2", "tags": ["Kommunikation", "Verhalten"], "path": "docs/vocabulary/personenbeschreibung/transparent.md"
+    },
+    {
+      "id": "verstaendnisvoll", "category": "personenbeschreibung", "title": "Verständnisvoll", "meaningZh": "善解人意的", "level": "B1", "tags": ["Charakter", "Empathie"], "path": "docs/vocabulary/personenbeschreibung/verstaendnisvoll.md"
+    },
+    {
+      "id": "interessiert", "category": "personenbeschreibung", "title": "Interessiert", "meaningZh": "感兴趣的", "level": "B1", "tags": ["Interesse", "Verhalten"], "path": "docs/vocabulary/personenbeschreibung/interessiert.md"
+    },
+    {
+      "id": "aufmerksam", "category": "personenbeschreibung", "title": "Aufmerksam", "meaningZh": "专注且细心的", "level": "B1", "tags": ["Charakter", "Verhalten"], "path": "docs/vocabulary/personenbeschreibung/aufmerksam.md"
+    },
+    {
+      "id": "aufrichtig", "category": "personenbeschreibung", "title": "Aufrichtig", "meaningZh": "真诚的", "level": "B2", "tags": ["Charakter", "Werte"], "path": "docs/vocabulary/personenbeschreibung/aufrichtig.md"
+    },
+    {
+      "id": "freundlich", "category": "personenbeschreibung", "title": "Freundlich", "meaningZh": "友好的", "level": "B1", "tags": ["Charakter", "Verhalten"], "path": "docs/vocabulary/personenbeschreibung/freundlich.md"
+    },
+    {
+      "id": "hilfsbereit", "category": "personenbeschreibung", "title": "Hilfsbereit", "meaningZh": "乐于助人的", "level": "B1", "tags": ["Charakter", "Hilfe"], "path": "docs/vocabulary/personenbeschreibung/hilfsbereit.md"
+    },
+    {
+      "id": "mitfuehlend", "category": "personenbeschreibung", "title": "Mitfühlend", "meaningZh": "富有同情心的", "level": "B2", "tags": ["Charakter", "Empathie", "Gefühl"], "path": "docs/vocabulary/personenbeschreibung/mitfuehlend.md"
+    },
+    {
+      "id": "zurueckhaltend", "category": "personenbeschreibung", "title": "Zurückhaltend", "meaningZh": "内敛克制的", "level": "B2", "tags": ["Charakter", "Verhalten"], "path": "docs/vocabulary/personenbeschreibung/zurueckhaltend.md"
+    },
+    {
+      "id": "boese-auf", "category": "gefuehle", "title": "Böse auf + Akkusativ", "meaningZh": "生某人的气", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/boese-auf.md"
+    },
+    {
+      "id": "wuetend-auf", "category": "gefuehle", "title": "Wütend auf + Akkusativ", "meaningZh": "对某人非常愤怒", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/wuetend-auf.md"
+    },
+    {
+      "id": "eifersuechtig-auf", "category": "gefuehle", "title": "Eifersüchtig auf + Akkusativ", "meaningZh": "嫉妒某人；吃醋", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/eifersuechtig-auf.md"
+    },
+    {
+      "id": "neidisch-auf", "category": "gefuehle", "title": "Neidisch auf + Akkusativ", "meaningZh": "羡慕或嫉妒某人", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/neidisch-auf.md"
+    },
+    {
+      "id": "stolz-auf", "category": "gefuehle", "title": "Stolz auf + Akkusativ", "meaningZh": "为某人或某事骄傲", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/stolz-auf.md"
+    },
+    {
+      "id": "neugierig-auf", "category": "gefuehle", "title": "Neugierig auf + Akkusativ", "meaningZh": "对某事好奇或期待", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/neugierig-auf.md"
+    },
+    {
+      "id": "erstaunt-ueber", "category": "gefuehle", "title": "Erstaunt über + Akkusativ", "meaningZh": "对某事惊讶", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/erstaunt-ueber.md"
+    },
+    {
+      "id": "traurig-ueber", "category": "gefuehle", "title": "Traurig über + Akkusativ", "meaningZh": "因某事难过", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/traurig-ueber.md"
+    },
+    {
+      "id": "froh-ueber", "category": "gefuehle", "title": "Froh über + Akkusativ", "meaningZh": "因某事高兴", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/froh-ueber.md"
+    },
+    {
+      "id": "gluecklich-ueber", "category": "gefuehle", "title": "Glücklich über + Akkusativ", "meaningZh": "因某事感到幸福", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/gluecklich-ueber.md"
+    },
+    {
+      "id": "entsetzt-ueber", "category": "gefuehle", "title": "Entsetzt über + Akkusativ", "meaningZh": "对某事震惊", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/entsetzt-ueber.md"
+    },
+    {
+      "id": "begeistert-von", "category": "gefuehle", "title": "Begeistert von + Dativ", "meaningZh": "被某人或某物吸引", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/begeistert-von.md"
+    },
+    {
+      "id": "fasziniert-von", "category": "gefuehle", "title": "Fasziniert von + Dativ", "meaningZh": "被某人或某物迷住", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/fasziniert-von.md"
+    },
+    {
+      "id": "beeindruckt-von", "category": "gefuehle", "title": "Beeindruckt von + Dativ", "meaningZh": "被某人或某物打动", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/beeindruckt-von.md"
+    },
+    {
+      "id": "enttaeuscht-von", "category": "gefuehle", "title": "Enttäuscht von + Dativ", "meaningZh": "对某人或某物失望", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/enttaeuscht-von.md"
+    },
+    {
+      "id": "zufrieden-mit", "category": "gefuehle", "title": "Zufrieden mit + Dativ", "meaningZh": "对某人、事物或状态满意", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/zufrieden-mit.md"
+    },
+    {
+      "id": "wut-an-jemandem-auslassen", "category": "gefuehle", "title": "Seine Wut an jemandem auslassen", "meaningZh": "把怒气发泄在某人身上", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/wut-an-jemandem-auslassen.md"
     }
   ]
 }

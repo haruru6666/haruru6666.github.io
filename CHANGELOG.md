@@ -21,3 +21,5 @@
 - 词汇分类升级为可搜索的网页索引，并落实“一个词或搭配，一个 Markdown”。
 - 将旧词汇聚合文件迁移为 Redemittel、Ursachenbank 与 Kollokationen 独立知识页。
 - 精简 Vocabulary 卡片入口，并将原因库、解决方案库和结果库归入 Writing 模块。
+- 合并介词入口并统一命名为“介词用法”，新增 `sich auswirken auf + Akkusativ`。
+- 新增人物与性格、情感形容词分类；按独立 Markdown 收录情感介词搭配及区别。

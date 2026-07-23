@@ -3,6 +3,9 @@
 ## 一级导航
 
 - [Grammar](grammar/README.md)
+  - [介词用法](../Präpositionen.html)
+  - [Sich auswirken auf + Akkusativ](grammar/prepositions/sich-auswirken-auf.md)
+  - [情感形容词的介词用法与区别](grammar/prepositions/emotionale-adjektive.md)
 - [Vocabulary](vocabulary/README.md)
 - [Writing](writing/README.md)
 - [Speaking](speaking/README.md)
@@ -17,6 +20,9 @@
 - [Kollokationen 网页](../VocabularyLibrary.html?category=kollokationen)
   - [Eine wichtige Rolle spielen](vocabulary/kollokationen/eine-wichtige-rolle-spielen.md)
   - [Einen Beitrag leisten](vocabulary/kollokationen/einen-beitrag-leisten.md)
+- [人物与性格网页](../VocabularyLibrary.html?category=personenbeschreibung)
+- [情感形容词网页](../VocabularyLibrary.html?category=gefuehle)
+  - [介词用法总览](grammar/prepositions/emotionale-adjektive.md)
 
 ## Writing
 

@@ -1951,5 +1951,26 @@
     "易混介词/结构": "außerhalb; über ... hinaus",
     "记忆提示": "跨过边界到另一侧",
     "标签": "C1,抽象"
+  },
+  {
+    "ID": "94",
+    "CEFR": "B2-C1",
+    "模块": "动词+介词",
+    "主题": "影响与结果",
+    "介词/结构": "sich auswirken auf + Akkusativ",
+    "支配格": "Akkusativ",
+    "是否双向介词": "否",
+    "核心意义": "对某人或某事产生影响",
+    "引申意义": "用于分析措施、变化或条件造成的结果",
+    "思维模型": "一个因素把作用施加到目标对象上",
+    "常见搭配": "sich positiv auf etwas auswirken; sich negativ auf etwas auswirken; sich stark auf jemanden auswirken",
+    "A1-A2例句": "Das Wetter wirkt sich auf meine Stimmung aus.",
+    "B1-B2例句": "Regelmäßige Bewegung wirkt sich positiv auf die Gesundheit aus.",
+    "C1例句": "Die strukturellen Veränderungen wirken sich langfristig auf die gesellschaftliche Entwicklung aus.",
+    "中文解释": "对……产生积极、消极或长期影响",
+    "常见错误": "遗漏反身代词 sich；使用 Dativ；主句中忘记把 aus 放到句末",
+    "易混介词/结构": "Auswirkungen haben auf + Akkusativ; beeinflussen + Akkusativ",
+    "记忆提示": "影响朝向目标：auf + Akkusativ；主句 wirkt ... aus",
+    "标签": "B2,C1,动词介词,影响,Akkusativ,写作"
   }
 ]
