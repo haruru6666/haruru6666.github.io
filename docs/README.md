@@ -21,8 +21,6 @@
   - [Eine wichtige Rolle spielen](vocabulary/kollokationen/eine-wichtige-rolle-spielen.md)
   - [Einen Beitrag leisten](vocabulary/kollokationen/einen-beitrag-leisten.md)
 - [人物与性格网页](../VocabularyLibrary.html?category=personenbeschreibung)
-- [情感形容词网页](../VocabularyLibrary.html?category=gefuehle)
-  - [介词用法总览](grammar/prepositions/emotionale-adjektive.md)
 
 ## Writing
 

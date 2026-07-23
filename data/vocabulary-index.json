@@ -41,13 +41,6 @@
       "name": "Personenbeschreibung",
       "nameZh": "人物与性格",
       "description": "用于描述人物印象、性格、态度和情感能力的高频表达。"
-    },
-    {
-      "id": "gefuehle",
-      "module": "vocabulary",
-      "name": "Gefühle mit Präpositionen",
-      "nameZh": "情感形容词",
-      "description": "按目标、原因、来源和状态理解情感形容词的固定介词搭配。"
     }
   ],
   "entries": [
@@ -125,57 +118,6 @@
     },
     {
       "id": "zurueckhaltend", "category": "personenbeschreibung", "title": "Zurückhaltend", "meaningZh": "内敛克制的", "level": "B2", "tags": ["Charakter", "Verhalten"], "path": "docs/vocabulary/personenbeschreibung/zurueckhaltend.md"
-    },
-    {
-      "id": "boese-auf", "category": "gefuehle", "title": "Böse auf + Akkusativ", "meaningZh": "生某人的气", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/boese-auf.md"
-    },
-    {
-      "id": "wuetend-auf", "category": "gefuehle", "title": "Wütend auf + Akkusativ", "meaningZh": "对某人非常愤怒", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/wuetend-auf.md"
-    },
-    {
-      "id": "eifersuechtig-auf", "category": "gefuehle", "title": "Eifersüchtig auf + Akkusativ", "meaningZh": "嫉妒某人；吃醋", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/eifersuechtig-auf.md"
-    },
-    {
-      "id": "neidisch-auf", "category": "gefuehle", "title": "Neidisch auf + Akkusativ", "meaningZh": "羡慕或嫉妒某人", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/neidisch-auf.md"
-    },
-    {
-      "id": "stolz-auf", "category": "gefuehle", "title": "Stolz auf + Akkusativ", "meaningZh": "为某人或某事骄傲", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/stolz-auf.md"
-    },
-    {
-      "id": "neugierig-auf", "category": "gefuehle", "title": "Neugierig auf + Akkusativ", "meaningZh": "对某事好奇或期待", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/neugierig-auf.md"
-    },
-    {
-      "id": "erstaunt-ueber", "category": "gefuehle", "title": "Erstaunt über + Akkusativ", "meaningZh": "对某事惊讶", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/erstaunt-ueber.md"
-    },
-    {
-      "id": "traurig-ueber", "category": "gefuehle", "title": "Traurig über + Akkusativ", "meaningZh": "因某事难过", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/traurig-ueber.md"
-    },
-    {
-      "id": "froh-ueber", "category": "gefuehle", "title": "Froh über + Akkusativ", "meaningZh": "因某事高兴", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/froh-ueber.md"
-    },
-    {
-      "id": "gluecklich-ueber", "category": "gefuehle", "title": "Glücklich über + Akkusativ", "meaningZh": "因某事感到幸福", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/gluecklich-ueber.md"
-    },
-    {
-      "id": "entsetzt-ueber", "category": "gefuehle", "title": "Entsetzt über + Akkusativ", "meaningZh": "对某事震惊", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/entsetzt-ueber.md"
-    },
-    {
-      "id": "begeistert-von", "category": "gefuehle", "title": "Begeistert von + Dativ", "meaningZh": "被某人或某物吸引", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/begeistert-von.md"
-    },
-    {
-      "id": "fasziniert-von", "category": "gefuehle", "title": "Fasziniert von + Dativ", "meaningZh": "被某人或某物迷住", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/fasziniert-von.md"
-    },
-    {
-      "id": "beeindruckt-von", "category": "gefuehle", "title": "Beeindruckt von + Dativ", "meaningZh": "被某人或某物打动", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/beeindruckt-von.md"
-    },
-    {
-      "id": "enttaeuscht-von", "category": "gefuehle", "title": "Enttäuscht von + Dativ", "meaningZh": "对某人或某物失望", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/enttaeuscht-von.md"
-    },
-    {
-      "id": "zufrieden-mit", "category": "gefuehle", "title": "Zufrieden mit + Dativ", "meaningZh": "对某人、事物或状态满意", "level": "B1", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/zufrieden-mit.md"
-    },
-    {
-      "id": "wut-an-jemandem-auslassen", "category": "gefuehle", "title": "Seine Wut an jemandem auslassen", "meaningZh": "把怒气发泄在某人身上", "level": "B2", "tags": ["Gefühle", "Präpositionen"], "path": "docs/vocabulary/gefuehle/wut-an-jemandem-auslassen.md"
     }
   ]
 }

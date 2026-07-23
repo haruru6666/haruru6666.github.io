@@ -30,4 +30,4 @@ last_updated: 2026-07-23
 
 ## Related Topics
 
-- [情感形容词的介词用法与区别](../../grammar/prepositions/emotionale-adjektive.md)
+- [情感形容词的介词用法与区别](../emotionale-adjektive.md)
