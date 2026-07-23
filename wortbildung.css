@@ -41,40 +41,73 @@
 .wb-section-heading h2 { margin: .1rem 0 0; color: #232b3b; font-size: clamp(1.35rem, 2.4vw, 1.8rem); }
 .wb-section-heading > p { max-width: 620px; margin: 0; color: var(--muted); }
 .wb-explorer-heading { margin: .3rem .1rem .8rem; }
-.wb-chapter-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; }
-.wb-chapter {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: .2rem .65rem;
-    min-height: 92px;
-    padding: .85rem;
-    border: 1px solid #e5e4fa;
-    border-radius: 14px;
-    background: #fafaff;
+.wb-learning-path { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+.wb-learning-path > a {
+    display: flex;
+    gap: .85rem;
+    padding: 1rem;
+    border: 1px solid rgba(109,93,252,.22);
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(109,93,252,.11), rgba(255,255,255,.96));
     color: #232b3b;
     text-decoration: none;
-    transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
 }
-.wb-chapter:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent);
-    box-shadow: 0 10px 22px rgba(73, 63, 170, .09);
+.wb-learning-path > a:hover, .wb-suffix-grid a:hover, .wb-transform-link:hover { border-color: var(--accent); }
+.wb-learning-path > a > span:last-child { display: grid; gap: .16rem; }
+.wb-learning-path small, .wb-group-title > div > span {
+    color: var(--accent);
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
 }
-.wb-chapter > span {
-    grid-row: 1 / 3;
+.wb-learning-path strong { font-size: 1.05rem; }
+.wb-learning-path em { color: var(--muted); font-size: .84rem; font-style: normal; }
+.wb-path-number {
     display: grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 9px;
-    background: rgba(109,93,252,.1);
-    color: var(--accent);
+    flex: 0 0 2.3rem;
+    width: 2.3rem;
+    height: 2.3rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
     font-size: .78rem;
     font-weight: 800;
 }
-.wb-chapter strong { align-self: end; font-size: 1rem; }
-.wb-chapter small { color: var(--muted); line-height: 1.35; }
-.wb-chapter-featured { background: linear-gradient(135deg, rgba(109,93,252,.11), rgba(255,255,255,.96)); }
+.wb-chapter-group { margin-top: 1.2rem; padding-top: 1.1rem; border-top: 1px solid #e9eaf3; }
+.wb-group-title { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: .65rem; }
+.wb-group-title h3 { margin: .08rem 0 0; color: #232b3b; font-size: 1.12rem; }
+.wb-group-title > small { color: var(--muted); }
+.wb-suffix-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55rem; }
+.wb-suffix-grid a {
+    display: flex;
+    align-items: baseline;
+    gap: .55rem;
+    padding: .72rem .8rem;
+    border: 1px solid #e5e4fa;
+    border-radius: 11px;
+    background: #fafaff;
+    color: #232b3b;
+    text-decoration: none;
+}
+.wb-suffix-grid strong { min-width: 3.4rem; color: var(--accent); font-size: 1rem; }
+.wb-suffix-grid span { color: var(--muted); font-size: .82rem; }
+.wb-other-group { display: grid; grid-template-columns: minmax(180px, .45fr) minmax(0, 1fr); align-items: center; gap: 1rem; }
+.wb-other-group .wb-group-title { margin: 0; }
+.wb-transform-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .75rem .9rem;
+    border: 1px solid #e5e4fa;
+    border-radius: 12px;
+    color: #232b3b;
+    text-decoration: none;
+}
+.wb-transform-link span { display: grid; gap: .12rem; }
+.wb-transform-link small { color: var(--muted); }
+.wb-transform-link b { color: var(--accent); }
 .wb-controls {
     display: grid;
     gap: .8rem;
@@ -143,8 +176,10 @@
     .wb-detail { grid-template-columns: 1fr; }
     .wb-detail .wb-wide { grid-column: auto; }
     .wb-section-heading { align-items: flex-start; flex-direction: column; }
-    .wb-chapter-grid { grid-template-columns: 1fr; }
+    .wb-learning-path, .wb-suffix-grid { grid-template-columns: 1fr; }
+    .wb-other-group { grid-template-columns: 1fr; }
+    .wb-group-title { align-items: flex-start; flex-direction: column; gap: .25rem; }
 }
 @media (min-width: 761px) and (max-width: 1080px) {
-    .wb-chapter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .wb-suffix-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

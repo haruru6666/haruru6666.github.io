@@ -4,9 +4,13 @@
 
 [打开构词法交互教材](../../../Wortbildung.html)
 
-## 导航
+## 推荐学习路径
 
-- [形容词词尾总览](01_形容词词尾总览.md)
+1. [形容词词尾总览](01_形容词词尾总览.md)
+2. [考试高频构词规律](11_考试高频构词规律.md)
+
+## Adjektivsuffixe · 形容词后缀
+
 - [`-bar`](02_-bar.md)
 - [`-lich`](03_-lich.md)
 - [`-ig`](04_-ig.md)
@@ -16,7 +20,9 @@
 - [`-sam`](08_-sam.md)
 - [`-fähig`](09_-fähig.md)
 - [`-wert`](10_-wert.md)
-- [考试高频构词规律](11_考试高频构词规律.md)
+
+## Wortartwechsel · 词性转换
+
 - [Adjektiv → Nomen](adjektiv-nomen.md)
 
 ## 计划主题
