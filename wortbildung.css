@@ -23,6 +23,58 @@
     text-decoration: none;
     white-space: nowrap;
 }
+.wb-chapters {
+    margin-bottom: 1.35rem;
+    padding: clamp(1.2rem, 2.5vw, 1.7rem);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: rgba(255,255,255,.94);
+    box-shadow: var(--shadow);
+}
+.wb-section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.wb-section-heading h2 { margin: .1rem 0 0; color: #232b3b; font-size: clamp(1.35rem, 2.4vw, 1.8rem); }
+.wb-section-heading > p { max-width: 620px; margin: 0; color: var(--muted); }
+.wb-explorer-heading { margin: .3rem .1rem .8rem; }
+.wb-chapter-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; }
+.wb-chapter {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: .2rem .65rem;
+    min-height: 92px;
+    padding: .85rem;
+    border: 1px solid #e5e4fa;
+    border-radius: 14px;
+    background: #fafaff;
+    color: #232b3b;
+    text-decoration: none;
+    transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+.wb-chapter:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 22px rgba(73, 63, 170, .09);
+}
+.wb-chapter > span {
+    grid-row: 1 / 3;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9px;
+    background: rgba(109,93,252,.1);
+    color: var(--accent);
+    font-size: .78rem;
+    font-weight: 800;
+}
+.wb-chapter strong { align-self: end; font-size: 1rem; }
+.wb-chapter small { color: var(--muted); line-height: 1.35; }
+.wb-chapter-featured { background: linear-gradient(135deg, rgba(109,93,252,.11), rgba(255,255,255,.96)); }
 .wb-controls {
     display: grid;
     gap: .8rem;
@@ -90,4 +142,9 @@
     .wb-summary { align-items: flex-start; flex-direction: column; }
     .wb-detail { grid-template-columns: 1fr; }
     .wb-detail .wb-wide { grid-column: auto; }
+    .wb-section-heading { align-items: flex-start; flex-direction: column; }
+    .wb-chapter-grid { grid-template-columns: 1fr; }
+}
+@media (min-width: 761px) and (max-width: 1080px) {
+    .wb-chapter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

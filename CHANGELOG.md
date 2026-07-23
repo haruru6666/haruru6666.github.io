@@ -10,6 +10,7 @@
 ### Updated
 
 - 将 Wortbildung 从 Vocabulary 迁移到 Grammar，并统一所有知识库导航。
+- 在 Deutsch lernen 首页补充 Grammar → 构词法入口，并在构词法网页增加全部独立 Markdown 章节卡片。
 - 校正 `-fähig`、`-sam`、`-bar` 与 `-isch` 的适用范围，明确区分识别规律与自由造词。
 - 构词互动数据与 Markdown 目录同步；Markdown 保留完整讲解，JSON 只维护结构化示例，避免重复正文。
 
